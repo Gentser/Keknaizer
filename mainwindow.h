@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "ganttchart.h"
+#include "timeline.h"
+#include "timelineitem.h"
 
 namespace Ui {
 class MainWindow;

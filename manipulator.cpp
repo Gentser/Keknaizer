@@ -2,7 +2,9 @@
 
 #include <qfile.h>
 #include <qjsondocument.h>
-#include <qjsonobject.h>
+//#include <qjsonobject.h>
+
+#include <exception>
 
 Manipulator::Manipulator() {
     #if (defined (_WIN32) || defined (_WIN64))
@@ -14,7 +16,7 @@ QJsonObject Manipulator::read() {
 
     QFile file(pathToFile);
     if (!file.open(QIODevice::ReadOnly)) {
-        throw FileException(pathToFile.toStdString()); // some file exception?
+        throw std::exception(); // some file exception? pathToFile.toStdString()
     }
     QByteArray rawData = QByteArray::fromBase64(file.readAll());
 //    QByteArray rawData = file.readAll();
@@ -31,7 +33,7 @@ void Manipulator::write(QJsonObject json) {
     if (save_file.exists())
         save_file.remove();
     if (!save_file.open(QIODevice::WriteOnly)) {
-        throw FileException(pathToFile.toStdString()); //some file exception ?
+        throw std::exception(); //some file exception ? pathToFile.toStdString()
     }
 
     save_file.write(json_string.toLocal8Bit().toBase64());

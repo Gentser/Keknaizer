@@ -27,7 +27,10 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     allocator.cpp \
-    manipulator.cpp
+    manipulator.cpp \
+    timelineitem.cpp \
+    timeline.cpp \
+    ganttchart.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -35,7 +38,10 @@ HEADERS += \
     iterator.h \
     manipulator.h \
     singletone.h \
-    serializer.h
+    serializer.h \
+    timelineitem.h \
+    timeline.h \
+    ganttchart.h
 
 FORMS += \
         mainwindow.ui

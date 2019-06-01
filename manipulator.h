@@ -1,5 +1,7 @@
 #ifndef MANIPULATOR_H
 #define MANIPULATOR_H
+#include <QString>
+#include <QJsonObject>
 
 
 class Manipulator

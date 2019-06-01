@@ -19,7 +19,7 @@ public:
     // rebind allocator to type U
     template <class U>
     struct rebind {
-       typedef AllocImpl<U> other;
+       typedef Allocator<U> other;
     };
 
     // return address of values
@@ -78,20 +78,22 @@ public:
           ::operator delete((void*)p);
       }
 
-      // return that all specializations of this Allocator are interchangeable
-      template <class T1, class T2>
-      bool operator== (const AllocImpl<T1>&,
-                       const AllocImpl<T2>&) throw() {
-          return true;
-      }
-      template <class T1, class T2>
-      bool operator!= (const AllocImpl<T1>&,
-                       const AllocImpl<T2>&) throw() {
-          return false;
-      }
 
 
 };
+
+// return that all specializations of this Allocator are interchangeable
+template <class T1, class T2>
+bool operator== (const Allocator<T1>&,
+                 const Allocator<T2>&) throw() {
+    return true;
+}
+template <class T1, class T2>
+bool operator!= (const Allocator<T1>&,
+                 const Allocator<T2>&) throw() {
+    return false;
+}
+
 
 
 
