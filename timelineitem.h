@@ -20,7 +20,7 @@ public:
     TimelineItem(){}
 
     TimelineItem(QDateTime start, QDateTime end, T content){
-        if(end < start){
+        if(end <= start){ // Добавил <=
             throw StartGreaterThanEndException(start, end);
         }
         else{
@@ -66,8 +66,6 @@ public:
     }
 
     void print(){
-//        qDebug() << (QString) this->toString(this->getContent()) ;
-//        std::cout << this->toString(this->getContent());
         qDebug() << this->getStart().toString() ;
         qDebug() << this->getEnd().toString() ;
     }
@@ -78,6 +76,45 @@ public:
         std::ostringstream oss;
         oss << value;
         return oss.str();
+    }
+
+    //Edit methods
+    bool editConntentByContent(T newContent){
+        this->setContent(newContent);
+        return true;
+    }
+
+    bool editStartByContent(QDateTime newStartTime){
+        if(this->getEnd() <= newStartTime){
+            throw EditItemNewStartException(newStartTime, this->getEnd());
+        }
+        else{
+            this->setStart(newStartTime);
+            return true;
+        }
+    }
+
+    bool editEndByContent(QDateTime newEndTime){
+        if(newEndTime <= this->getStart()){
+            throw EditItemNewEndException(this->getStart(), newEndTime);
+        }
+        else
+        {
+            this->setEnd(newEndTime);
+            return true;
+        }
+    }
+
+    bool editTimeByContent(QDateTime newStartTime, QDateTime newEndTime){ //Start and End
+        if(newEndTime <= newStartTime){
+            throw StartGreaterThanEndException(newStartTime, newEndTime); //may be new Exception?
+        }
+        else{
+            this->setStart(newStartTime);
+            this->setEnd(newEndTime);
+            return true;
+        }
+
     }
 };
 

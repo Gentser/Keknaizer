@@ -8,9 +8,6 @@
 
 //#include <QTextCodec>
 
-
-
-
 class Exception
 {
 private:
@@ -37,12 +34,21 @@ public:
     }
 };
 
-class StartGreaterThanEndException : public Exception{
+class EditTimeException: public Exception{
+public:
+    EditTimeException(std::string msg): Exception(msg){
+
+    }
+
+};
+
+
+class StartGreaterThanEndException : public EditTimeException{
 private:
     QDateTime start;
     QDateTime end;
 public:
-    StartGreaterThanEndException(QDateTime start, QDateTime end): Exception("Start " + start.toString().toStdString() + " greater than end " + end.toString().toStdString()){
+    StartGreaterThanEndException(QDateTime start, QDateTime end): EditTimeException("Start " + start.toString().toStdString() + " greater than end " + end.toString().toStdString()){
         this->start = start;
         this->end = end;
     }
@@ -53,6 +59,46 @@ public:
 
     QString getEnd(){
         return this->end.toString();
+    }
+
+};
+
+
+class EditItemNewStartException: public EditTimeException{// end <= newStart
+private:
+    QDateTime newStart;
+    QDateTime end;
+public:
+    EditItemNewStartException(QDateTime newStart, QDateTime end): EditTimeException("While Editing NEWSTART= " + newStart.toString().toStdString() + " greater than old end " + end.toString().toStdString()){
+        this->newStart = newStart;
+        this->end = end;
+    }
+
+    QString getNewStart(){
+        return this->newStart.toString();
+    }
+
+    QString getEnd(){
+        return this->end.toString();
+    }
+};
+
+class EditItemNewEndException: public EditTimeException{
+private:
+    QDateTime start;
+    QDateTime newEnd;
+public:
+    EditItemNewEndException(QDateTime start, QDateTime newEnd): EditTimeException("While Editing NEWEND= " + newEnd.toString().toStdString() + " less than old start " + start.toString().toStdString()){
+        this->start = start;
+        this->newEnd = newEnd;
+    }
+
+    QString getStart(){
+        return this->start.toString();
+    }
+
+    QString getNewEnd(){
+        return this->newEnd.toString();
     }
 
 };

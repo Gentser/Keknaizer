@@ -1,0 +1,25 @@
+Edit contents in Items
+*******************************
+//Тестирование edit-ing в Item-ах
+
+//    qDebug() << "Before " << QString::fromStdString(item->getContent());
+
+//    item->editConntentByContent(std::string("Has been Edited"));
+
+//    qDebug() << "After " << QString::fromStdString(item->getContent());
+
+//    Diagram->getTimelines()->at(0).getIntervals()->at(0).editConntentByContent("NEW HERE");
+
+
+Edit times in Items
+*******************************
+
+
+try{
+    Diagram->getTimelines()->at(0).getIntervals()->at(2).editStartByContent(
+                            QDateTime(QDate(2000,1,1), QTime(0,0)));
+} catch (EditTimeException e){
+    qCritical() << "CATCH EXCEPT" << QString::fromStdString(e.getMessage());
+}
+
+*******************************
