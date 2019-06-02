@@ -58,6 +58,18 @@ public:
     {
         name = value;
     }
+
+    //Editing Items (with i++)
+     TimelineItem<T> *findItemByName(T content){ //iterator
+        int i = 0;
+        for(auto iter = this->intervals->begin(); iter != this->intervals->end(); ++iter, i++){
+            if(iter->getContent() == content){
+                return &this->intervals->at(i); //  iter
+            }
+        }
+        throw ItemNameNotFoundException(content);
+        return nullptr;
+    }
 };
 
 #endif // TIMELINE_H

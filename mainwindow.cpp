@@ -81,6 +81,15 @@ MainWindow::MainWindow(QWidget *parent) :
         iter->print();
     }
 
+    //Find ItemByName Test from Timeline
+    try{
+        qDebug() << "НАШЛАСЬ" ;
+        firstTimeline->findItemByName("Задача")->print();
+        qDebug() << "НАШЛАСЬ" ;
+    } catch (FindItemNameException e){
+        qCritical() << "CATCH EXCEPT" << QString::fromStdString(e.getMessage()) ;
+    }
+
     } catch (StartGreaterThanEndException e){
         qCritical() << "CATCH EXCEPT" << QString::fromStdString(e.getMessage()) ;
     }

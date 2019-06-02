@@ -103,4 +103,19 @@ public:
 
 };
 
+class FindItemNameException: public Exception
+{
+public:
+    FindItemNameException(std::string msg): Exception(msg) {}
+};
+
+class ItemNameNotFoundException: public FindItemNameException{
+private:
+    std::string nameToFind;
+public:
+    ItemNameNotFoundException(std::string name): FindItemNameException("Item with Name= " + name + " is NOT FOUND"){
+        this->nameToFind = name;
+    }
+};
+
 #endif // EXCEPTION_H
