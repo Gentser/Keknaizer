@@ -33,7 +33,7 @@ public:
     void printMessage(){
 //        QTextCodec::setCodecForLocale(QTextCodec::codecForName("IBM 866"));
         std::cerr << getMessage() << std::endl; //Русские буквы не отображеются
-        qCritical() << QString::fromStdString(getMessage());
+        qCritical() << "ERROR: " << QString::fromStdString(getMessage());
     }
 };
 
