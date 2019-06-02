@@ -5,7 +5,7 @@
 #include "allocator.h"
 #include <sstream>
 #include <QString>
-
+#include "exception.h"
 
 
 template <class T>
@@ -20,9 +20,14 @@ public:
     TimelineItem(){}
 
     TimelineItem(QDateTime start, QDateTime end, T content){
-        this->setStart(start);
-        this->setEnd(end);
-        this->setContent(content);
+        if(end < start){
+            throw StartGreaterThanEndException(start, end);
+        }
+        else{
+            this->setStart(start);
+            this->setEnd(end);
+            this->setContent(content);
+        }
     }
 
     ~TimelineItem(){}
