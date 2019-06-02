@@ -29,16 +29,29 @@ MainWindow::MainWindow(QWidget *parent) :
     //Item
     firstTimeline.addItem(item);
 
+    firstTimeline.addItem(TimelineItem<std::string>(QDateTime(QDate(2009,5,13), QTime(13,45)),
+                                                    QDateTime(QDate(2009,5,13), QTime(20,00)),
+                                                    std::string("А это вторая задача!")
+                              ));
+
     Diagram->addTimeline(firstTimeline);
     //Diagram->getTimelines().at(0).getIntervals().at(0).getStart()
 //    std::cout << "Check" << item;
-    item.print();
+//    item.print();
 
-    firstTimeline.getIntervals().at(0).print();
+//    firstTimeline.getIntervals().at(0).print();
 
-    Diagram->getTimelines().at(0).getIntervals().at(0).print();
+    //ПОКА какая-то ошибка при итерирвании (без итератора)
+//    for (auto iter = Diagram->getTimelines().at(0).getIntervals().begin();
+//         iter!=Diagram->getTimelines().at(0).getIntervals().end(); ++iter){
 
+//        iter->print();
+//    }
 
+    //Только для тетсирования
+    for (int i = 0; i < Diagram->getTimelines().at(0).getIntervals().size(); i++){
+        Diagram->getTimelines().at(0).getIntervals().at(i).print();
+    }
 
 
 }

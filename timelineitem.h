@@ -3,6 +3,9 @@
 
 #include <QDateTime>
 #include "allocator.h"
+#include <sstream>
+#include <QString>
+
 
 
 template <class T>
@@ -58,9 +61,18 @@ public:
     }
 
     void print(){
-//        qDebug() << (std::string) this->getContent() ;
+//        qDebug() << (QString) this->toString(this->getContent()) ;
+//        std::cout << this->toString(this->getContent());
         qDebug() << this->getStart().toString() ;
         qDebug() << this->getEnd().toString() ;
+    }
+
+    template<typename E>
+    std::string toString(const E& value)
+    {
+        std::ostringstream oss;
+        oss << value;
+        return oss.str();
     }
 };
 
@@ -77,5 +89,7 @@ std::ostream& operator<<(std::ostream &strm, const TimelineItem<T> &item) {
   std::string cont = (std::string) item.getContent();
   return strm << "Item="<< "(from " << item.getStart().toString() << " until " << item.getEnd().toString() << ")";
 }
+
+
 
 #endif // TIMELINEITEM_H
