@@ -9,18 +9,20 @@ class GanttChart
 private:
     QDateTime minDate;
     QDateTime maxDate;
-    std::vector<Timeline<T>> timelines; // <TimelineItem<T>>
+    std::vector<Timeline<T>> *timelines; // <TimelineItem<T>>
 
 public:
     GanttChart(){
         this->setMinDate(QDateTime(QDate(2000,1,1), QTime(0,0)));
         this->setMaxDate(QDateTime(QDate(2020,1,1), QTime(0,0)));
+
+        this->timelines = new std::vector<Timeline<T>>;
     }
 
     ~GanttChart() {}
 
-    void addTimeline(Timeline<T> timeLine){
-        this->timelines.push_back(timeLine);
+    void addTimeline(Timeline<T> *timeLine){
+        this->timelines->push_back( *timeLine); // было без *
     }
 
     QDateTime getMinDate() const
@@ -39,7 +41,7 @@ public:
     {
         maxDate = value;
     }
-    std::vector<Timeline<T>> getTimelines() const //<TimelineItem<T>>
+    std::vector<Timeline<T>> *getTimelines() const //<TimelineItem<T>>
     {
         return timelines;
     }
