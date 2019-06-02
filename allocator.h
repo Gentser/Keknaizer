@@ -34,12 +34,12 @@ public:
       /* constructors and destructor
        * - nothing to do because the Allocator has no state
        */
-      Allocator() throw();
-      Allocator(const Allocator&) throw();
+      Allocator() throw() {}
+      Allocator(const Allocator&) throw() {}
       template <class U>
       Allocator (const Allocator<U>&) throw() {
       }
-      ~Allocator() throw();
+      ~Allocator() throw() {}
 
 
       // return maximum number of elements that can be allocated

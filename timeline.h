@@ -8,16 +8,16 @@ template <class T>
 class Timeline
 {
 private:
-    std::vector<TimelineItem<T>/*, Allocator<T>*/> intervals;
+    std::vector<TimelineItem<T>, Allocator<T>> intervals;
 public:
     Timeline(){}
 
     ~Timeline(){}
 
-    std::vector<TimelineItem<T>/*, Allocator<T>*/> getIntervals() const{
+    std::vector<TimelineItem<T>, Allocator<T>> getIntervals() const{
         return this->intervals;
     }
-    void setIntervals(const std::vector<TimelineItem<T>/*, Allocator<T>*/> &value){
+    void setIntervals(const std::vector<TimelineItem<T>, Allocator<T>> &value){
         this->intervals = value;
     }
 
