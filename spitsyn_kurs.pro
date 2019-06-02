@@ -30,7 +30,8 @@ SOURCES += \
     manipulator.cpp \
     timelineitem.cpp \
     timeline.cpp \
-    ganttchart.cpp
+    ganttchart.cpp \
+    exception.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -41,7 +42,8 @@ HEADERS += \
     serializer.h \
     timelineitem.h \
     timeline.h \
-    ganttchart.h
+    ganttchart.h \
+    exception.h
 
 FORMS += \
         mainwindow.ui

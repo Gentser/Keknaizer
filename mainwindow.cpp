@@ -6,6 +6,7 @@
 #include "timelineitem.h"
 #include "allocator.h"
 #include "iterator.h"
+#include "exception.h"
 
 #include <QDebug>
 
@@ -22,12 +23,23 @@ MainWindow::MainWindow(QWidget *parent) :
     Timeline<std::string> firstTimeline;
 
 
-    TimelineItem <std::string> item = TimelineItem<std::string>(QDateTime(QDate(2010,1,1), QTime(0,0)),
-                                               QDateTime(QDate(2010,2,3), QTime(15,35)),
-                                               std::string("Задача"));
+    try{
+        TimelineItem <std::string> item = TimelineItem<std::string>(QDateTime(QDate(2010,1,1), QTime(0,0)),
+                                                   QDateTime(QDate(2010,2,3), QTime(15,35)),
+                                                   std::string("Задача"));
 
-    //Item
-    firstTimeline.addItem(item);
+        TimelineItem <std::string> newItem = TimelineItem<std::string>(QDateTime(QDate(2010,1,1), QTime(0,0)),
+                                                                        QDateTime(QDate(2009,2,3), QTime(15,35)),
+                                                                        std::string("Задача"));
+
+        //Item
+        firstTimeline.addItem(item);
+
+    } catch (StartGreaterThanEndException e){
+        qCritical() << "CATCH EXCEPT" << QString::fromStdString(e.getMessage()) ;
+    }
+
+
 
     firstTimeline.addItem(TimelineItem<std::string>(QDateTime(QDate(2009,5,13), QTime(13,45)),
                                                     QDateTime(QDate(2009,5,13), QTime(20,00)),
@@ -35,16 +47,9 @@ MainWindow::MainWindow(QWidget *parent) :
                               ));
 
     Diagram->addTimeline(firstTimeline);
-    //Diagram->getTimelines().at(0).getIntervals().at(0).getStart()
-//    std::cout << "Check" << item;
-//    item.print();
-
-//    firstTimeline.getIntervals().at(0).print();
-
     //ПОКА какая-то ошибка при итерирвании (без итератора)
 //    for (auto iter = Diagram->getTimelines().at(0).getIntervals().begin();
 //         iter!=Diagram->getTimelines().at(0).getIntervals().end(); ++iter){
-
 //        iter->print();
 //    }
 
