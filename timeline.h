@@ -11,9 +11,15 @@ class Timeline
 {
 private:
     std::vector<TimelineItem<T>, Allocator<T>> *intervals; // было без звездочки
+    std::string name;
 public:
-    Timeline(){
+//    Timeline(){
+//        this->intervals = new std::vector<TimelineItem<T>, Allocator<T>>; //Раньше тут было пусто
+//    }
+
+    Timeline(std::string name){
         this->intervals = new std::vector<TimelineItem<T>, Allocator<T>>; //Раньше тут было пусто
+        this->name = name;
     }
 
     ~Timeline(){
@@ -43,6 +49,15 @@ public:
         return new Iterator<TimelineItem<T>>(this->intervals, this->intervals->size());
     }
 
+    std::string getName() const
+    {
+        return name;
+    }
+
+    void setName(const std::string &value)
+    {
+        name = value;
+    }
 };
 
 #endif // TIMELINE_H

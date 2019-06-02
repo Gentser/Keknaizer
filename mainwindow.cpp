@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
             new GanttChart<std::string>();
 
     //Timeline
-    Timeline<std::string> *firstTimeline = new Timeline<std::string>;
+    Timeline<std::string> *firstTimeline = new Timeline<std::string>("First_long_Timeline");
 
 
     try{
@@ -39,8 +39,6 @@ MainWindow::MainWindow(QWidget *parent) :
         qCritical() << "CATCH EXCEPT" << QString::fromStdString(e.getMessage()) ;
     }
 
-//    qDebug() << "We are here" ;
-
 
 
     firstTimeline->addItem(new TimelineItem<std::string>(QDateTime(QDate(2009,5,13), QTime(13,45)),
@@ -53,11 +51,10 @@ MainWindow::MainWindow(QWidget *parent) :
                                                          std::string("А это вторая задача!")
                                    ));
 
-//    qDebug() << "We are here !!!!" ;
 
     Diagram->addTimeline(firstTimeline);
 
-//    qDebug() << "We are here" ;
+    qDebug() << "Name of firstTimeline " << QString::fromStdString(firstTimeline->getName());
 
     //Только для тетсирования
     for (int i = 0; i < Diagram->getTimelines()->at(0).getIntervals()->size(); i++){
