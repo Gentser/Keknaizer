@@ -44,82 +44,76 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
 
+    try{
+        firstTimeline->addItem(new TimelineItem<std::string>(QDateTime(QDate(2009,5,13), QTime(13,45)),
+                                                        QDateTime(QDate(2009,5,13), QTime(20,00)),
+                                                        std::string("А это pervaya задача!")
+                                  ));
 
-    firstTimeline->addItem(new TimelineItem<std::string>(QDateTime(QDate(2009,5,13), QTime(13,45)),
-                                                    QDateTime(QDate(2009,5,13), QTime(20,00)),
-                                                    std::string("А это pervaya задача!")
-                              ));
-
-    firstTimeline->addItem(new TimelineItem<std::string>(QDateTime(QDate(2008,2,12), QTime(17,59)),
-                                                         QDateTime(QDate(2008,10,31), QTime(2,20)),
-                                                         std::string("А это вторая задача!")
-                                   ));
-
-
-    Diagram->addTimeline(firstTimeline);
-    qDebug() << "Name of firstTimeline " << QString::fromStdString(firstTimeline->getName());
+        firstTimeline->addItem(new TimelineItem<std::string>(QDateTime(QDate(2008,2,12), QTime(17,59)),
+                                                             QDateTime(QDate(2008,10,31), QTime(2,20)),
+                                                             std::string("А это вторая задача!")
+                                       ));
 
 
-    //Timeline 2
-    Timeline<std::string> *secondTimeline = new Timeline<std::string>("Second_long_Timeline", QDateTime(QDate(2001,1,1), QTime(0,0)), QDateTime(QDate(2019,1,1), QTime(0,0)));
+        Diagram->addTimeline(firstTimeline);
+        qDebug() << "Name of firstTimeline " << QString::fromStdString(firstTimeline->getName());
 
 
-    secondTimeline->addItem(new TimelineItem<std::string>(QDateTime(QDate(2011,4,11), QTime(11,45)),
-                                                    QDateTime(QDate(2012,4,13), QTime(20,00)),
-                                                    std::string("First task!")
-                              ));
-
-    secondTimeline->addItem(new TimelineItem<std::string>(QDateTime(QDate(2012,2,10), QTime(17,59)),
-                                                         QDateTime(QDate(2013,10,31), QTime(2,20)),
-                                                         std::string("And this is second task!")
-                                   ));
-
-    Diagram->addTimeline(secondTimeline);
-
-    //Timeline 3
-    Timeline<std::string> *thirdTimeline = new Timeline<std::string>("thirdTimeline", QDateTime(QDate(2001,1,1), QTime(0,0)), QDateTime(QDate(2019,1,12), QTime(0,0)));
+        //Timeline 2
+        Timeline<std::string> *secondTimeline = new Timeline<std::string>("Second_long_Timeline", QDateTime(QDate(2001,1,1), QTime(0,0)), QDateTime(QDate(2019,1,1), QTime(0,0)));
 
 
-    thirdTimeline->addItem(new TimelineItem<std::string>(QDateTime(QDate(2011,3,11), QTime(11,45)),
-                                                    QDateTime(QDate(2012,5,13), QTime(20,00)),
-                                                    std::string("First task!")
-                              ));
+        secondTimeline->addItem(new TimelineItem<std::string>(QDateTime(QDate(2011,4,11), QTime(11,45)),
+                                                        QDateTime(QDate(2012,4,13), QTime(20,00)),
+                                                        std::string("First task!")
+                                  ));
 
-    thirdTimeline->addItem(new TimelineItem<std::string>(QDateTime(QDate(2012,1,10), QTime(17,59)),
-                                                         QDateTime(QDate(2013,1,31), QTime(2,20)),
-                                                         std::string("And this is second task!")
-                                   ));
+        secondTimeline->addItem(new TimelineItem<std::string>(QDateTime(QDate(2012,2,10), QTime(17,59)),
+                                                             QDateTime(QDate(2013,10,31), QTime(2,20)),
+                                                             std::string("And this is second task!")
+                                       ));
 
-    Diagram->addTimeline(thirdTimeline);
+        Diagram->addTimeline(secondTimeline);
 
-
-    qDebug() << "Name of thirdTimeline " << QString::fromStdString(thirdTimeline->getName());
-
-
+        //Timeline 3
+        Timeline<std::string> *thirdTimeline = new Timeline<std::string>("thirdTimeline", QDateTime(QDate(2001,1,1), QTime(0,0)), QDateTime(QDate(2019,1,12), QTime(0,0)));
 
 
-    //Только для тетсирования
-  //  for (int i = 0; i < Diagram->getTimelines()->at(0).getIntervals()->size(); i++){
-   //     Diagram->getTimelines()->at(0).getIntervals()->at(i).print();
-    //}
+        thirdTimeline->addItem(new TimelineItem<std::string>(QDateTime(QDate(2011,3,11), QTime(11,45)),
+                                                        QDateTime(QDate(2012,5,13), QTime(20,00)),
+                                                        std::string("First task!")
+                                  ));
 
-    //Iterator (ИСПОЛЬЗУЙТЕ ТАКОЙ ОБХОД ПО TimelineItem - ам)
-//    for (auto iter = Diagram->getTimelines()->at(0).getIntervals()->begin();
-//         iter != Diagram->getTimelines()->at(0).getIntervals()->end(); ++iter){
-//        qDebug() << "Итерация" ;
-//        iter->print();
-//    }
+        thirdTimeline->addItem(new TimelineItem<std::string>(QDateTime(QDate(2012,1,10), QTime(17,59)),
+                                                             QDateTime(QDate(2013,1,31), QTime(2,20)),
+                                                             std::string("And this is second task!")
+                                       ));
 
-    Serializer<GanttChart<std::string>>& serializer = Serializer<GanttChart<std::string>>::instance();
+        Diagram->addTimeline(thirdTimeline);
 
-    //Serializer::Serialize<GraphLib::Graph<Vertex,Edge>>& serializer = Serializer::Serialize<GraphLib::Graph<Vertex,Edge>>::instance();
-    serializer.exportToJson(Diagram);
 
-    //ТУТ ПРОБЛЕМА С ИТЕРАТОРОМ(который написали)
-//    for (auto iter = Diagram->getTimelines().at(0).begin();
-//         iter != Diagram->getTimelines().at(0).end(); ++iter){
-//        iter->get_value.print();
-//    }
+        qDebug() << "Name of thirdTimeline " << QString::fromStdString(thirdTimeline->getName());
+
+        qDebug() << "Before edit All" ;
+        qDebug() << thirdTimeline->getStartDate().toString() << " and " << thirdTimeline->getEndDate().toString();
+        thirdTimeline->changeAllDates(QDateTime(QDate(2009,2,20), QTime(18,59)),
+                               QDateTime(QDate(2019,2,20), QTime(18,59)));
+        qDebug() << "After edit All" ;
+        qDebug() << thirdTimeline->getStartDate().toString() << " and " << thirdTimeline->getEndDate().toString();
+
+
+
+        Serializer<GanttChart<std::string>>& serializer = Serializer<GanttChart<std::string>>::instance();
+
+        //Serializer::Serialize<GraphLib::Graph<Vertex,Edge>>& serializer = Serializer::Serialize<GraphLib::Graph<Vertex,Edge>>::instance();
+        serializer.exportToJson(Diagram);
+
+    } catch (Exception e){
+
+    }
+
+
 
 
 }

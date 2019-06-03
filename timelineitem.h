@@ -66,8 +66,8 @@ public:
     }
 
     void print(){
-        qDebug() << this->getStart().toString() ;
-        qDebug() << this->getEnd().toString() ;
+        qDebug() << this->getStart().toString()  << this->getEnd().toString();
+//        qDebug() << this->getEnd().toString() ;
     }
 
     template<typename E>
@@ -131,7 +131,6 @@ std::ostream& operator<<(std::ostream &strm, const TimelineItem<T> &item) {
   std::string cont = (std::string) item.getContent();
   return strm << "Item="<< "(from " << item.getStart().toString() << " until " << item.getEnd().toString() << ")";
 }
-
 
 
 #endif // TIMELINEITEM_H
