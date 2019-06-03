@@ -11,8 +11,6 @@
 #include <QFile>
 #include <QDebug>
 #include <QDir>
-#include <singletone.h>
-#include "ganttchart.h"
 
 template <class T>
 class Serializer : public Singleton<Serializer<T>>
@@ -22,8 +20,8 @@ private:
     Manipulator* manipulator;
 
 public:
-    void exportToJson(T* gant);
-    void importFromJson(T* gant);
+    void exportToJson(T* graph);
+    void importFromJson(T* graph);
     Serializer(const Serializer&) = delete;
     Serializer& operator=(const Serializer &) = delete;
     Serializer(Serializer &&) = delete;
@@ -34,7 +32,7 @@ public:
         return test;
     }
 };
-
+}
 
 template <class T>
 Serializer<T>::Serializer(){
@@ -42,85 +40,57 @@ Serializer<T>::Serializer(){
 }
 
 template <class T>
-void Serializer<T>::exportToJson(T* gant){
+void Serializer<T>::exportToJson(T* graph){
     QJsonObject json;
-    QJsonArray jTimelines;
-    for(auto iter = gant->getTimelines()->begin();iter!=gant->getTimelines()->end(); ++iter)
+    QJsonArray jVertices;
+    for(auto iter = graph->getVertices()->begin();iter!=graph->getVertices()->end(); ++iter)
     {
-        QJsonArray jIntervals;
+        QJsonArray jEdges;
         QJsonObject obj;
-        obj["name"] = QString::fromStdString(iter->getName());
-        obj["dateToStart"] = iter->getStartDate().toString("ddd MMMM  d  hh:mm:ss yyyy");
-        obj["dateToEnd"] = iter->getEndDate().toString("ddd MMMM  d  hh:mm:ss yyyy");
-
-        for(auto iterInterv = iter->getIntervals()->begin(); iterInterv!=iter->getIntervals()->end(); ++iterInterv)
+        obj["id"] = iter->get_id();
+        obj["name"] = QString::fromStdString(iter->get_name());
+        obj["pos_x"] = std::trunc(iter->get_pos_x() * 100) / 100;
+        obj["pos_y"] = std::trunc(iter->get_pos_y() * 100) / 100;
+        for(auto iterEdge = iter->get_edges()->begin();iterEdge!=iter->get_edges()->end(); ++iterEdge)
         {
-                QJsonObject item;
-                item["end"] = iterInterv->getEnd().toString("ddd MMMM  d  hh:mm:ss yyyy");
-                item["Content"] = QString::fromStdString(iterInterv->getContent());
-                item["start"] = iterInterv->getStart().toString("ddd MMMM  d  hh:mm:ss yyyy");
-                jIntervals.push_back(item);
+            if(iter->get_id()!=iterEdge->get_to_id()){
+                QJsonObject edge;
+                edge["id"] = iterEdge->get_id();
+                edge["to_id"] = iterEdge->get_to_id();
+                edge["fly_time"] = iterEdge->get_fly_time();
+                jEdges.push_back(edge);
+            }
         }
-        obj["Intervals"] = jIntervals;
-        jTimelines.push_back(obj);
+        obj["edges"] = jEdges;
+        jVertices.push_back(obj);
     }
-    json["Timelines"] = jTimelines;
-    json["minDate"] = gant->getMinDate().toString("ddd MMMM  d  hh:mm:ss yyyy");
-    json["maxDate"] = gant->getMaxDate().toString("ddd MMMM  d  hh:mm:ss yyyy");
+    json["vertices"] = jVertices;
 
     manipulator->write(json);
 }
 
 template <class T>
-void Serializer<T>::importFromJson(T* gant){
+void Serializer<T>::importFromJson(T* graph){
     QJsonObject json = manipulator->read();
 
-    QJsonArray jTimelines = json["Timelines"].toArray();
-    QJsonArray jIntervals;
+    QJsonArray jVertices = json["vertices"].toArray();
+    QJsonArray jEdges;
+    for(auto iter = jVertices.begin();iter!=jVertices.end(); ++iter)
+    {
+        QJsonObject obj = iter->toObject();
+        graph->add_vertex(new Vertex<Edge>(obj["id"].toInt(),obj["name"].toString().toStdString(),obj["pos_x"].toDouble(),obj["pos_y"].toDouble()));
+        jEdges = obj["edges"].toArray();
+        for(auto iter = jEdges.begin();iter!=jEdges.end(); ++iter)
+        {
+            QJsonObject objEdges = iter->toObject();
+            try {
+                graph->add_edge(obj["id"].toInt(),new Edge(objEdges["id"].toInt(),objEdges["to_id"].toInt(),objEdges["fly_time"].toInt()));
+            } catch (EdgeLoopException e) {
+                std::cerr<<"loop exception"<<std::endl;
+            }
 
-//    for(auto iter = jTimelines.begin();iter!=jTimelines.end(); ++iter)
-//    {
-//        QJsonObject obj = iter->toObject();
-
-//        Timeline<std::string> *firstTimeline = new Timeline<std::string>("First_long_Timeline");
-
-//        gant->addTimeline(new TimeLine<std::string>(obj["name"].toString().toStdString()));
-
-//       // gant->addTimeline(new TimeLine<std::string>(obj["id"].toInt(),obj["name"].toString().toStdString(),obj["pos_x"].toDouble(),obj["pos_y"].toDouble()));
-//        jIntervals = obj["Intervals"].toArray();
-//        for(auto iter = jIntervals.begin();iter!=jIntervals.end(); ++iter)
-//        {
-//            QJsonObject objInt = iter->toObject();
-//            try {
-//                gant->add_edge(obj["id"].toInt(),new Edge(objEdges["id"].toInt(),objEdges["to_id"].toInt(),objEdges["fly_time"].toInt()));
-//                item["end"] = iterInterv->getEnd().toString("ddd MMMM  d  hh:mm:ss yyyy");
-//                item["Content"] = QString::fromStdString(iterInterv->getContent());
-//                item["start"] = iterInterv->getStart().toString("ddd MMMM  d  hh:mm:ss yyyy");
-//            } catch (EdgeLoopException e) {
-//                std::cerr<<"loop exception"<<std::endl;
-//            }
-
-//        }
-//    }
-
-//    QJsonArray jVertices = json["vertices"].toArray();
-//    QJsonArray jEdges;
-//    for(auto iter = jVertices.begin();iter!=jVertices.end(); ++iter)
-//    {
-//        QJsonObject obj = iter->toObject();
-//        graph->add_vertex(new Vertex<Edge>(obj["id"].toInt(),obj["name"].toString().toStdString(),obj["pos_x"].toDouble(),obj["pos_y"].toDouble()));
-//        jEdges = obj["edges"].toArray();
-//        for(auto iter = jEdges.begin();iter!=jEdges.end(); ++iter)
-//        {
-//            QJsonObject objEdges = iter->toObject();
-//            try {
-//                graph->add_edge(obj["id"].toInt(),new Edge(objEdges["id"].toInt(),objEdges["to_id"].toInt(),objEdges["fly_time"].toInt()));
-//            } catch (EdgeLoopException e) {
-//                std::cerr<<"loop exception"<<std::endl;
-//            }
-
-//        }
-//    }
+        }
+    }
 }
 
 #endif // SERIALIZER_H

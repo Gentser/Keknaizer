@@ -66,8 +66,8 @@ public:
     }
 
     void print(){
-        qDebug() << this->getStart().toString() ;
-        qDebug() << this->getEnd().toString() ;
+        qDebug() << this->getStart().toString()  << this->getEnd().toString();
+//        qDebug() << this->getEnd().toString() ;
     }
 
     template<typename E>

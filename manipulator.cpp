@@ -8,7 +8,7 @@
 
 Manipulator::Manipulator() {
     #if (defined (_WIN32) || defined (_WIN64))
-        pathToFile = "gantt4.json"; //resolve this
+        pathToFile = "../OurProj/gantt"; //resolve this
     #endif
 }
 
@@ -32,12 +32,11 @@ void Manipulator::write(QJsonObject json) {
     QFile save_file(pathToFile);
     if (save_file.exists())
         save_file.remove();
-   // if (!save_file.open(QIODevice::WriteOnly)) {
-     //   throw std::exception(); //some file exception ? pathToFile.toStdString()
-    //}
+    if (!save_file.open(QIODevice::WriteOnly)) {
+        throw std::exception(); //some file exception ? pathToFile.toStdString()
+    }
 
-    save_file.open(QIODevice::WriteOnly);
-    save_file.write(json_string.toLocal8Bit());//.toBase64());
+    save_file.write(json_string.toLocal8Bit().toBase64());
 //    save_file.write(json_string.toLocal8Bit());
     save_file.close();
 }
