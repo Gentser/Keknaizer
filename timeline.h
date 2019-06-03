@@ -33,7 +33,7 @@ public:
     }
 
     ~Timeline(){
-        delete this->intervals; // не было раньше
+        
     }
 
     QDateTime getEndDate() const
