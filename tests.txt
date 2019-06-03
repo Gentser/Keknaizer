@@ -90,4 +90,45 @@ for (auto iter = Diagram->getTimelines()->at(0).getIntervals()->begin();
 }
 
 
+*******************************
+//Изменение имения у Timeline-а самим таймлайном
+qDebug() << "Старое имя" << QString::fromStdString(second->getName());
+
+second->changeNameOfTimeline("ПОМЕНЯЛ ИМЯ");
+
+qDebug() << "Новое имя" << QString::fromStdString(second->getName());
+
+
+********************************
+//Тест edit of Start в Timeline
+
+qDebug() << "Before edit Start" ;
+qDebug() << second->getStartDate().toString();
+second->changeStartDate(QDateTime(QDate(2000,2,20), QTime(18,59)));
+qDebug() << "After edit Start" ;
+qDebug() << second->getStartDate().toString();
+
+
+
+*******************************
+//Тест edit of End в Timeline
+
+qDebug() << "Before edit End" ;
+qDebug() << second->getEndDate().toString();
+second->changeEndDate(QDateTime(QDate(2018,2,20), QTime(18,59)));
+qDebug() << "After edit End" ;
+qDebug() << second->getEndDate().toString();
+
+
+******************************
+
+//Тест edit ALL в Timeline
+
+qDebug() << "Before edit All" ;
+qDebug() << second->getStartDate().toString() << " and " << second->getEndDate().toString();
+second->changeAllDates(QDateTime(QDate(2009,2,20), QTime(18,59)),
+                       QDateTime(QDate(2019,2,20), QTime(18,59)));
+qDebug() << "After edit All" ;
+qDebug() << second->getStartDate().toString() << " and " << second->getEndDate().toString();
+
 

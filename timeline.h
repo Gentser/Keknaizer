@@ -12,6 +12,7 @@ class Timeline
 private:
     std::vector<TimelineItem<T>/*, Allocator<T>*/> *intervals; // было без звездочки
     std::string name;
+
     QDateTime startDate;
     QDateTime endDate;
 public:
@@ -32,7 +33,7 @@ public:
     }
 
     ~Timeline(){
-        
+
     }
 
     QDateTime getEndDate() const
@@ -191,6 +192,67 @@ public:
 
     }
 
+    //Editing Timeline
+    void changeNameOfTimeline(std::string newName){
+        this->setName(newName);
+    }
+
+    //Check newStart with Start of First item
+    bool checkStartWithFirstItem(QDateTime newStartDate){
+        QDateTime forChecking = this->intervals->front().getStart();
+        if(!this->intervals->empty() && newStartDate <= forChecking){
+            return true;
+        }
+        else throw TimelineNewStartGreaterFirstItemException(newStartDate, forChecking);
+
+    }
+
+    QDateTime getMaxDateOfItems(){
+        if(!this->getIntervals()->empty()){
+            QDateTime maxDate = QDateTime(QDate(1500,1,1),QTime(0,0));
+            for(auto iter = this->intervals->begin(); iter != this->intervals->end(); ++iter ){
+                if (iter->getEnd() > maxDate){
+                    maxDate = iter->getEnd();
+                }
+            }
+            return maxDate;
+        }
+        else throw EmptyVectorOfItemsException(this->getName());
+    }
+
+    //Change Timeline's Start
+    bool changeStartDate(QDateTime newStartDate){
+        if(checkStartWithFirstItem(newStartDate)){
+            this->setStartDate(newStartDate);
+            return true;
+        }
+        else throw TimelineStartBorderException(newStartDate, this->getIntervals()->front().getStart());
+
+    }
+
+    //Change Timeline's End
+    bool changeEndDate(QDateTime newEndDate){
+        QDateTime maxDateOfItem = getMaxDateOfItems();
+        if(newEndDate >= maxDateOfItem){
+            this->setEndDate(newEndDate);
+            return true;
+        }
+        else throw TimelineEndBorderException(newEndDate, maxDateOfItem);
+    }
+
+    //Change Timeline's borders
+    bool changeAllDates(QDateTime newStartDate, QDateTime newEndDate){
+        if(checkStartWithFirstItem(newStartDate)){
+            QDateTime maxDateOfItem = getMaxDateOfItems();
+            if(newEndDate >= maxDateOfItem){
+                this->setStartDate(newStartDate);
+                this->setEndDate(newEndDate);
+                return true;
+            }
+            else throw TimelineEndBorderException(newEndDate, maxDateOfItem);
+        }
+        else throw TimelineStartBorderException(newStartDate, this->intervals->front().getStart());
+    }
 
 };
 
