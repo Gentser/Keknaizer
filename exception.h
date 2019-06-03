@@ -184,7 +184,7 @@ private:
     QDateTime userStart;
     QDateTime trueStart;
 public:
-    TimelineStartBorderException(QDateTime userSt, QDateTime trueSt): TimelineExcetion("Users start= " + userSt.toString().toStdString() + " is not in <=: TRUEstart= " + trueSt.toString().toStdString()){
+    TimelineStartBorderException(QDateTime userSt, QDateTime trueSt): TimelineExcetion("Users start= " + userSt.toString().toStdString() + " is not in >=: TRUEstart= " + trueSt.toString().toStdString()){
         this->userStart = userSt;
         this->trueStart = trueSt;
     }
@@ -195,42 +195,9 @@ private:
     QDateTime userEnd;
     QDateTime trueEnd;
 public:
-    TimelineEndBorderException(QDateTime userEn, QDateTime trueEn): TimelineExcetion("End=" + userEn.toString().toStdString() + " is not in >=: TRUEend= " + trueEn.toString().toStdString()){
+    TimelineEndBorderException(QDateTime userEn, QDateTime trueEn): TimelineExcetion("End=" + userEn.toString().toStdString() + " is not in <=: TRUEend= " + trueEn.toString().toStdString()){
         this->userEnd = userEn;
         this->trueEnd = trueEn;
-    }
-};
-
-class TimelineNewStartGreaterFirstItemException: public TimelineExcetion{
-private:
-    QDateTime userStart;
-    QDateTime firstItem;
-public:
-    TimelineNewStartGreaterFirstItemException(QDateTime userStart, QDateTime firstItem): TimelineExcetion("IN EDIT new START= " + userStart.toString().toStdString() + " greater than start of first item= " + firstItem.toString().toStdString()){
-        this->userStart = userStart;
-        this->firstItem = firstItem;
-    }
-
-};
-
-class TimelineNewEndLessLastItemException: public TimelineExcetion{
-private:
-    QDateTime userEnd;
-    QDateTime lastItem;
-public:
-    TimelineNewEndLessLastItemException(QDateTime userEnd, QDateTime lastItem): TimelineExcetion("IN EDIT new END= " + userEnd.toString().toStdString() + " less than end of last item= " + lastItem.toString().toStdString()){
-        this->userEnd = userEnd;
-        this->lastItem = lastItem;
-    }
-
-};
-
-class EmptyVectorOfItemsException: public TimelineExcetion{
-private:
-    std::string nameOfTimeline;
-public:
-    EmptyVectorOfItemsException(std::string name): TimelineExcetion("Vector of Items is EMPTY in Timeline= " + name){
-        this->nameOfTimeline = name;
     }
 };
 
