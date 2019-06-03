@@ -18,6 +18,8 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    GanttChart<std::string> *Diagram;
+
 private:
     Ui::MainWindow *ui;
 };

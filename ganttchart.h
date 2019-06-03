@@ -2,6 +2,7 @@
 #define GANTTCHART_H
 #include <QDateTime>
 #include <timeline.h>
+#include <iterator.h>
 
 template <class T>
 class GanttChart
@@ -9,14 +10,15 @@ class GanttChart
 private:
     QDateTime minDate;
     QDateTime maxDate;
-    std::vector<Timeline<T>> *timelines; // <TimelineItem<T>>
+    //std::vector<Timeline<T>> *timelines; // <TimelineItem<T>>
+    std::vector<Timeline<T>/*, Allocator<Timeline<T>>*/> *timelines;
 
 public:
     GanttChart(){
         this->setMinDate(QDateTime(QDate(2000,1,1), QTime(0,0)));
         this->setMaxDate(QDateTime(QDate(2020,1,1), QTime(0,0)));
 
-        this->timelines = new std::vector<Timeline<T>>;
+        this->timelines = new std::vector<Timeline<T>/*, Allocator<Timeline<T>>*/>;
     }
 
     ~GanttChart() {}
@@ -41,14 +43,24 @@ public:
     {
         maxDate = value;
     }
-    std::vector<Timeline<T>> *getTimelines() const //<TimelineItem<T>>
+    std::vector<Timeline<T>/*, Allocator<Timeline<T>>*/> *getTimelines() const //<TimelineItem<T>>
     {
         return timelines;
     }
-    void setTimelines(const std::vector<Timeline<T>> &value) // <TimelineItem<T>>
+    void setTimelines(const std::vector<Timeline<T>/*, Allocator<Timeline<T>>*/> &value) // <TimelineItem<T>>
     {
         timelines = value;
     }
+
+//    typedef Iterator<T>* iterator;
+
+//               iterator begin(){
+//                   return new Iterator<T>(timelines, 0);
+//               }
+//               iterator end(){
+//                   return new Iterator<T>(this->timelines, this->timelines->size());
+//               }
+
 };
 
 #endif // GANTTCHART_H
