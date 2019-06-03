@@ -97,6 +97,7 @@ void MainWindow::on_PushButton_addTask_clicked()
 {
     itemDialog = new itemdialog;
     itemDialog->setModal(true);
+    itemDialog->setTitleName("Добававление задачи");
     itemDialog->exec();
 }
 
@@ -104,5 +105,6 @@ void MainWindow::on_PushButton_editTask_clicked()
 {
     itemDialog = new itemdialog;
     itemDialog->setModal(true);
+    itemDialog->setTitleName("Изменение задачи");
     itemDialog->exec();
 }

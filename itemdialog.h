@@ -13,6 +13,7 @@ class itemdialog : public QDialog
 
 public:
     explicit itemdialog(QWidget *parent = nullptr);
+    void setTitleName(QString str);
     ~itemdialog();
 
 private:

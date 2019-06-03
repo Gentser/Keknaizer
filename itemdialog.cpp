@@ -12,3 +12,8 @@ itemdialog::~itemdialog()
 {
     delete ui;
 }
+
+void itemdialog::setTitleName(QString name)
+{
+    ui->Title->setText(name);
+}
