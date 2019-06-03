@@ -9,6 +9,7 @@
 #include "exception.h"
 
 #include <QDebug>
+#include <itemdialog.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -90,4 +91,18 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::on_PushButton_addTask_clicked()
+{
+    itemDialog = new itemdialog;
+    itemDialog->setModal(true);
+    itemDialog->exec();
+}
+
+void MainWindow::on_PushButton_editTask_clicked()
+{
+    itemDialog = new itemdialog;
+    itemDialog->setModal(true);
+    itemDialog->exec();
 }
