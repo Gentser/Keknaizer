@@ -83,13 +83,13 @@ public:
 
     typedef Iterator<TimelineItem<T>>* iterator;
 
-    iterator begin(){
-        return new Iterator<TimelineItem<T>>(intervals, 0); //пока * (указатель)
-    }
+//    iterator begin(){
+//        return new Iterator<TimelineItem<T>>(intervals, 0); //пока * (указатель)
+//    }
 
-    iterator end(){
-        return new Iterator<TimelineItem<T>>(this->intervals, this->intervals->size());
-    }
+//    iterator end(){
+//        return new Iterator<TimelineItem<T>>(this->intervals, this->intervals->size());
+//    }
 
     std::string getName() const
     {
@@ -128,10 +128,15 @@ public:
                   this->intervals->end(), itemGreater()); // Сортировка
     }
 
+
+    //НЕ ТЕСТИЛОСЬ
     bool editItemContentByName(T oldContent, T newContent){
         TimelineItem<T> *itemToChange = this->findItemByName(oldContent);
-        itemToChange->editConntentByContent(newContent);
-        return true;
+        if(!(findWithoutException(newContent))){
+            itemToChange->editConntentByContent(newContent);
+            return true;
+        }
+        else throw TheSameNameException(newContent);
     }
 
     bool editItemStartByName(T oldContent, QDateTime newStart){
@@ -254,6 +259,14 @@ public:
         else throw TimelineStartBorderException(newStartDate, this->intervals->front().getStart());
     }
 
+};
+
+//New for GITHUB
+struct timelineGreater{
+    template <class T>
+    bool operator()(const Timeline<T>& left, const Timeline<T>& right) const{
+        return left.getStartDate() < right.getStartDate();
+    }
 };
 
 #endif // TIMELINE_H
