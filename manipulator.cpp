@@ -10,7 +10,7 @@
 
 Manipulator::Manipulator() {
     #if (defined (_WIN32) || defined (_WIN64))
-        pathToFile = "New_mask1.json"; //resolve this
+        pathToFile = "new_New_mask1.json"; //resolve this
     #endif
 }
 

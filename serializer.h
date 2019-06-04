@@ -84,15 +84,22 @@ void Serializer<T>::importFromJson(T* gant){
 
         //Timeline<std::string> *firstTimeline = new Timeline<std::string>("First_long_Timeline");
 
-         qDebug() << "test  " << obj["dateToStart"];
-          qDebug() << "test  " << obj["dateToStart"].toString();
-           qDebug() << "test  " << (QDateTime::fromString(obj["dateToStart"].toString(),"dd.MM.yyyy hh:mm:ss")).toString("dd.MM.yyyy hh:mm:ss");
-        qDebug() << "test  " << (QDateTime::fromString(obj["dateToStart"].toString(),"yyyy hh:mm:ss")).toString();
-
-         QDateTime date1 = QDateTime::fromString(obj["dateToEnd"].toString(),"dd.MM.yyyy hh:mm:ss");
+//         qDebug() << "test  " << obj["dateToStart"];
+//          qDebug() << "test  " << obj["dateToStart"].toString();
+//           qDebug() << "test  " << (QDateTime::fromString(obj["dateToStart"].toString(),"dd.MM.yyyy hh:mm:ss")).toString("dd.MM.yyyy hh:mm:ss");
+//        qDebug() << "test  " << (QDateTime::fromString(obj["dateToStart"].toString(),"yyyy hh:mm:ss")).toString();
 
 
-        Timeline<std::string> *newTimeline = new Timeline<std::string>(obj["name"].toString().toStdString(),QDateTime::fromString(obj["dateToStart"].toString("dd.MM.yyyy hh:mm:ss"),"dd.MM.yyyy hh:mm:ss"),
+//        QString date_string_on_db = obj["dateToEnd"].toString();
+//        QString dat22 = "2019-12-10 00:00:00";
+//        QDateTime Date0 = QDateTime::fromString(dat22,"yyyy-MM-dd hh:mm:ss");
+
+//         QDateTime date1 = QDateTime::fromString(obj["dateToEnd"].toString(),"dd.MM.yyyy hh:mm:ss");
+//         date1 = date1;
+//         //QLocale locale(QLocale::English, QLocale::UnitedStates);
+//         //QDateTime dt = QLocale::toDateTime(obj["dateToEnd"].toString(), "dd.MM.yyyy hh:mm:ss");
+
+        Timeline<std::string> *newTimeline = new Timeline<std::string>(obj["name"].toString().toStdString(),QDateTime::fromString(obj["dateToStart"].toString(),"dd.MM.yyyy hh:mm:ss"),
                 QDateTime::fromString(obj["dateToEnd"].toString("dd.MM.yyyy hh:mm:ss"),"dd.MM.yyyy hh:mm:ss"));
 
         jIntervals = obj["Intervals"].toArray();
@@ -100,9 +107,9 @@ void Serializer<T>::importFromJson(T* gant){
         {
             QJsonObject objInt = iterItem->toObject();
 
-                newTimeline->addItem(new TimelineItem<std::string>(QDateTime::fromString(obj["start"].toString(),"dd.MM.yyyy hh:mm:ss"),
-                                                                  QDateTime::fromString(obj["end"].toString(),"dd.MM.yyyy hh:mm:ss"),
-                                                                  std::string(obj["Content"].toString().toStdString())));
+                newTimeline->addItem(new TimelineItem<std::string>(QDateTime::fromString(objInt["start"].toString(),"dd.MM.yyyy hh:mm:ss"),
+                                                                  QDateTime::fromString(objInt["end"].toString(),"dd.MM.yyyy hh:mm:ss"),
+                                                                  std::string(objInt["Content"].toString().toStdString())));
         }
         gant->addTimeline(newTimeline);
     }
