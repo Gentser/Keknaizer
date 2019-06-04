@@ -93,22 +93,6 @@ MainWindow::MainWindow(QWidget *parent) :
         Diagram->addTimeline(thirdTimeline);
 
 
-        qDebug() << "Name of thirdTimeline " << QString::fromStdString(thirdTimeline->getName());
-
-        qDebug() << "Before edit All" ;
-        qDebug() << thirdTimeline->getStartDate().toString() << " and " << thirdTimeline->getEndDate().toString();
-        thirdTimeline->changeAllDates(QDateTime(QDate(2009,2,20), QTime(18,59)),
-                               QDateTime(QDate(2019,2,20), QTime(18,59)));
-        qDebug() << "After edit All" ;
-        qDebug() << thirdTimeline->getStartDate().toString() << " and " << thirdTimeline->getEndDate().toString();
-
-
-
-        Serializer<GanttChart<std::string>>& serializer = Serializer<GanttChart<std::string>>::instance();
-
-        //Serializer::Serialize<GraphLib::Graph<Vertex,Edge>>& serializer = Serializer::Serialize<GraphLib::Graph<Vertex,Edge>>::instance();
-        serializer.exportToJson(Diagram);
-
     } catch (Exception e){
 
     }

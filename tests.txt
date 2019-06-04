@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 Edit contents in Items
 *******************************
 //Тестирование edit-ing в Item-ах
@@ -226,5 +225,28 @@ for (auto iter = Diagram->getTimelines()->at(0).getIntervals()->begin();
 }
 
 
+**************************
+qDebug() << "Name of thirdTimeline " << QString::fromStdString(thirdTimeline->getName());
 
->>>>>>> baa88eb464b885d258f417c8c999c84cfad1f86d
+qDebug() << "Before edit All" ;
+qDebug() << thirdTimeline->getStartDate().toString() << " and " << thirdTimeline->getEndDate().toString();
+thirdTimeline->changeAllDates(QDateTime(QDate(2009,2,20), QTime(18,59)),
+                       QDateTime(QDate(2019,2,20), QTime(18,59)));
+qDebug() << "After edit All" ;
+qDebug() << thirdTimeline->getStartDate().toString() << " and " << thirdTimeline->getEndDate().toString();
+
+**************************
+
+
+for(auto iter=Diagram->getTimelines()->begin(); iter!= Diagram->getTimelines()->end(); ++iter){
+    qDebug() << QString::fromStdString(iter->getName());
+}
+
+qDebug() << "РЕДАКТИРОВАНИЕ" ;
+Diagram->editTimelineName("asf", "newName");
+
+for(auto iter=Diagram->getTimelines()->begin(); iter!= Diagram->getTimelines()->end(); ++iter){
+    qDebug() << QString::fromStdString(iter->getName());
+}
+
+*************************

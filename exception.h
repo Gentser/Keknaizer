@@ -234,4 +234,22 @@ public:
     }
 };
 
+class TimelineNameNotFoundException: public TimelineExcetion{
+private:
+    std::string nameToFind;
+public:
+    TimelineNameNotFoundException(std::string name): TimelineExcetion("Timeline with Name= " + name + " is NOT FOUND"){
+        this->nameToFind = name;
+    }
+};
+
+class TheSameTimelineNameException: public TimelineExcetion{
+private:
+    std::string theSameName;
+public:
+    TheSameTimelineNameException(std::string name): TimelineExcetion("Timeline with Name= " + name + " EXISTS"){
+        this->theSameName = name;
+    }
+};
+
 #endif // EXCEPTION_H
