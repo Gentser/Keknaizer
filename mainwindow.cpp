@@ -20,21 +20,21 @@ MainWindow::MainWindow(QWidget *parent) :
 
     Diagram = new GanttChart<std::string>();
 
-    //Serializer<GanttChart<std::string>>& serializer = Serializer<GanttChart<std::string>>::instance();
-    //serializer.importFromJson(Diagram);
+    Serializer<GanttChart<std::string>>& serializer = Serializer<GanttChart<std::string>>::instance();
+   // serializer.importFromJson(Diagram);
 
-    //Timeline
+   // Timeline
     Timeline<std::string> *firstTimeline = new Timeline<std::string>("First_long_Timeline", QDateTime(QDate(2008,1,1), QTime(0,0)), QDateTime(QDate(2019,1,1), QTime(0,0)));
 
 
     try{
         TimelineItem <std::string> *item = new TimelineItem<std::string>(QDateTime(QDate(2010,1,1), QTime(0,0)),
                                                    QDateTime(QDate(2010,2,3), QTime(15,35)),
-                                                   std::string("Задача 1"));
+                                                   std::string("Task 1"));
 
         TimelineItem <std::string> *newItem = new TimelineItem<std::string>(QDateTime(QDate(2010,1,1), QTime(0,0)),
                                                                         QDateTime(QDate(2012,2,3), QTime(15,35)),
-                                                                        std::string("Задача 2"));
+                                                                        std::string("Task 2"));
 
         //Item
         firstTimeline->addItem(item);
@@ -47,12 +47,12 @@ MainWindow::MainWindow(QWidget *parent) :
     try{
         firstTimeline->addItem(new TimelineItem<std::string>(QDateTime(QDate(2009,5,13), QTime(13,45)),
                                                         QDateTime(QDate(2009,5,13), QTime(20,00)),
-                                                        std::string("А это pervaya задача!")
+                                                        std::string("This is pervaya zadacha!")
                                   ));
 
         firstTimeline->addItem(new TimelineItem<std::string>(QDateTime(QDate(2008,2,12), QTime(17,59)),
                                                              QDateTime(QDate(2008,10,31), QTime(2,20)),
-                                                             std::string("А это вторая задача!")
+                                                             std::string("This is vtoraya zadacha!")
                                        ));
 
 
@@ -104,11 +104,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 
-        Serializer<GanttChart<std::string>>& serializer = Serializer<GanttChart<std::string>>::instance();
-
-        //Serializer::Serialize<GraphLib::Graph<Vertex,Edge>>& serializer = Serializer::Serialize<GraphLib::Graph<Vertex,Edge>>::instance();
-        serializer.exportToJson(Diagram);
-
     } catch (Exception e){
 
     }
@@ -125,7 +120,6 @@ MainWindow::~MainWindow()
 
     Serializer<GanttChart<std::string>>& serializer = Serializer<GanttChart<std::string>>::instance();
 
-    //Serializer::Serialize<GraphLib::Graph<Vertex,Edge>>& serializer = Serializer::Serialize<GraphLib::Graph<Vertex,Edge>>::instance();
-    //serializer.exportToJson(Diagram);
+    serializer.exportToJson(Diagram);
     delete ui;
 }

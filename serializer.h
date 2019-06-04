@@ -50,23 +50,23 @@ void Serializer<T>::exportToJson(T* gant){
         QJsonArray jIntervals;
         QJsonObject obj;
         obj["name"] = QString::fromStdString(iter->getName());
-        obj["dateToStart"] = iter->getStartDate().toString("ddd MMMM  d  hh:mm:ss yyyy");
-        obj["dateToEnd"] = iter->getEndDate().toString("ddd MMMM  d  hh:mm:ss yyyy");
+        obj["dateToStart"] = iter->getStartDate().toString("dd.MM.yyyy hh:mm:ss");
+        obj["dateToEnd"] = iter->getEndDate().toString("dd.MM.yyyy hh:mm:ss");
 
         for(auto iterInterv = iter->getIntervals()->begin(); iterInterv!=iter->getIntervals()->end(); ++iterInterv)
         {
                 QJsonObject item;
-                item["end"] = iterInterv->getEnd().toString("ddd MMMM  d  hh:mm:ss yyyy");
+                item["end"] = iterInterv->getEnd().toString("dd.MM.yyyy hh:mm:ss");
                 item["Content"] = QString::fromStdString(iterInterv->getContent());
-                item["start"] = iterInterv->getStart().toString("ddd MMMM  d  hh:mm:ss yyyy");
+                item["start"] = iterInterv->getStart().toString("dd.MM.yyyy hh:mm:ss");
                 jIntervals.push_back(item);
         }
         obj["Intervals"] = jIntervals;
         jTimelines.push_back(obj);
     }
     json["Timelines"] = jTimelines;
-    json["minDate"] = gant->getMinDate().toString("ddd MMMM  d  hh:mm:ss yyyy");
-    json["maxDate"] = gant->getMaxDate().toString("ddd MMMM  d  hh:mm:ss yyyy");
+    json["minDate"] = gant->getMinDate().toString("dd.MM.yyyy hh:mm:ss");
+    json["maxDate"] = gant->getMaxDate().toString("dd.MM.yyyy hh:mm:ss");
 
     manipulator->write(json);
 }
@@ -78,30 +78,34 @@ void Serializer<T>::importFromJson(T* gant){
     QJsonArray jTimelines = json["Timelines"].toArray();
     QJsonArray jIntervals;
 
-//    for(auto iter = jTimelines.begin();iter!=jTimelines.end(); ++iter)
-//    {
-//        QJsonObject obj = iter->toObject();
+    for(auto iter = jTimelines.begin();iter!=jTimelines.end(); ++iter)
+    {
+        QJsonObject obj = iter->toObject();
 
-//        Timeline<std::string> *firstTimeline = new Timeline<std::string>("First_long_Timeline");
+        //Timeline<std::string> *firstTimeline = new Timeline<std::string>("First_long_Timeline");
 
-//        gant->addTimeline(new TimeLine<std::string>(obj["name"].toString().toStdString()));
+         qDebug() << "test  " << obj["dateToStart"];
+          qDebug() << "test  " << obj["dateToStart"].toString();
+           qDebug() << "test  " << (QDateTime::fromString(obj["dateToStart"].toString(),"dd.MM.yyyy hh:mm:ss")).toString("dd.MM.yyyy hh:mm:ss");
+        qDebug() << "test  " << (QDateTime::fromString(obj["dateToStart"].toString(),"yyyy hh:mm:ss")).toString();
 
-//       // gant->addTimeline(new TimeLine<std::string>(obj["id"].toInt(),obj["name"].toString().toStdString(),obj["pos_x"].toDouble(),obj["pos_y"].toDouble()));
-//        jIntervals = obj["Intervals"].toArray();
-//        for(auto iter = jIntervals.begin();iter!=jIntervals.end(); ++iter)
-//        {
-//            QJsonObject objInt = iter->toObject();
-//            try {
-//                gant->add_edge(obj["id"].toInt(),new Edge(objEdges["id"].toInt(),objEdges["to_id"].toInt(),objEdges["fly_time"].toInt()));
-//                item["end"] = iterInterv->getEnd().toString("ddd MMMM  d  hh:mm:ss yyyy");
-//                item["Content"] = QString::fromStdString(iterInterv->getContent());
-//                item["start"] = iterInterv->getStart().toString("ddd MMMM  d  hh:mm:ss yyyy");
-//            } catch (EdgeLoopException e) {
-//                std::cerr<<"loop exception"<<std::endl;
-//            }
+         QDateTime date1 = QDateTime::fromString(obj["dateToEnd"].toString(),"dd.MM.yyyy hh:mm:ss");
 
-//        }
-//    }
+
+        Timeline<std::string> *newTimeline = new Timeline<std::string>(obj["name"].toString().toStdString(),QDateTime::fromString(obj["dateToStart"].toString("dd.MM.yyyy hh:mm:ss"),"dd.MM.yyyy hh:mm:ss"),
+                QDateTime::fromString(obj["dateToEnd"].toString("dd.MM.yyyy hh:mm:ss"),"dd.MM.yyyy hh:mm:ss"));
+
+        jIntervals = obj["Intervals"].toArray();
+        for(auto iterItem = jIntervals.begin();iterItem!=jIntervals.end(); ++iterItem)
+        {
+            QJsonObject objInt = iterItem->toObject();
+
+                newTimeline->addItem(new TimelineItem<std::string>(QDateTime::fromString(obj["start"].toString(),"dd.MM.yyyy hh:mm:ss"),
+                                                                  QDateTime::fromString(obj["end"].toString(),"dd.MM.yyyy hh:mm:ss"),
+                                                                  std::string(obj["Content"].toString().toStdString())));
+        }
+        gant->addTimeline(newTimeline);
+    }
 
 //    QJsonArray jVertices = json["vertices"].toArray();
 //    QJsonArray jEdges;
@@ -113,6 +117,8 @@ void Serializer<T>::importFromJson(T* gant){
 //        for(auto iter = jEdges.begin();iter!=jEdges.end(); ++iter)
 //        {
 //            QJsonObject objEdges = iter->toObject();
+
+
 //            try {
 //                graph->add_edge(obj["id"].toInt(),new Edge(objEdges["id"].toInt(),objEdges["to_id"].toInt(),objEdges["fly_time"].toInt()));
 //            } catch (EdgeLoopException e) {
