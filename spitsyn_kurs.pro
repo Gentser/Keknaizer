@@ -24,6 +24,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+    itemdialog.cpp \
         main.cpp \
         mainwindow.cpp \
     allocator.cpp \
@@ -34,6 +35,7 @@ SOURCES += \
     exception.cpp
 
 HEADERS += \
+    itemdialog.h \
         mainwindow.h \
     allocator.h \
     iterator.h \
@@ -46,6 +48,7 @@ HEADERS += \
     exception.h
 
 FORMS += \
+        itemdialog.ui \
         mainwindow.ui
 
 DISTFILES += \
