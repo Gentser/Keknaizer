@@ -30,3 +30,4 @@ private:
     itemdialog *itemDialog;
 };
 
+#endif

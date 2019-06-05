@@ -142,3 +142,4 @@ void MainWindow::on_PushButton_editTask_clicked()
     itemDialog->setModal(true);
     itemDialog->setTitleName("Изменение задачи");
     itemDialog->exec();
+}

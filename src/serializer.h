@@ -11,7 +11,7 @@
 #include <QFile>
 #include <QDebug>
 #include <QDir>
-#include <singletone.h>
+#include "singletone.h"
 #include "ganttchart.h"
 
 template <class T>
