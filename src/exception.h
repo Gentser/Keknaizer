@@ -252,4 +252,30 @@ public:
     }
 };
 
+
+class GanttException: public Exception{
+public:
+    GanttException(std::string msg): Exception(msg){
+
+    }
+
+};
+
+class NoTimelineForDeleteException: public GanttException{
+private:
+    std::string nameOfDeletingItem;
+public:
+    NoTimelineForDeleteException(std::string name): GanttException("No Timeline to delete Item= " + name){
+        this->nameOfDeletingItem = name;
+    }
+};
+
+class NotExistingTimelineException: public GanttException{
+private:
+public:
+    NotExistingTimelineException(): GanttException("This Timline is not existing"){
+
+    }
+};
+
 #endif // EXCEPTION_H

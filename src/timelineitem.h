@@ -31,6 +31,7 @@ public:
     }
 
     ~TimelineItem(){}
+
     QDateTime getStart() const
     {
         return start;

@@ -23,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     Serializer<GanttChart<std::string>>& serializer = Serializer<GanttChart<std::string>>::instance();
     serializer.importFromJson(Diagram);
 
-//   // Timeline
+////   // Timeline
 //    Timeline<std::string> *firstTimeline = new Timeline<std::string>("First_long_Timeline", QDateTime(QDate(2008,1,1), QTime(0,0)), QDateTime(QDate(2019,1,1), QTime(0,0)));
 
 
@@ -113,31 +113,6 @@ MainWindow::MainWindow(QWidget *parent) :
 //    }
 
     try{
-
-//        QDateTime some = QDateTime(QDate(2009,2,21), QTime(18,59));
-//        qDebug() << some.date().dayOfWeek();
-//        qDebug() << some.date().weekNumber();
-
-//        qDebug() << some.date().addDays(-some.date().dayOfWeek()+1).dayOfWeek();
-//        qDebug() << some.date().addDays(-some.date().dayOfWeek()+1).weekNumber();
-//        qDebug() << some.date().addDays(-some.date().dayOfWeek()+1);
-
-//        QDateTime newDate = QDateTime(QDate(some.date().addDays(-some.date().dayOfWeek()+1)));
-
-//        qDebug() << newDate.toString();
-
-//        QDateTime finishDate = QDateTime(QDate(newDate.date().addDays(6)));
-
-//        qDebug() << finishDate.toString();
-
-//        qDebug() << finishDate.date().weekNumber() << " == " << newDate.date().weekNumber();
-
-//        qDebug() << "New name of Timeline= " << "Week_" +QString::number(newDate.date().weekNumber()) + "_" +  QString::number(newDate.date().year());
-
-//        QDateTime newSome = QDateTime(QDate());
-
-        Diagram->addItemNew(QDateTime(QDate(2030,3,20), QTime(18,59)),
-                            QDateTime(QDate(2030,3,21), QTime(13,45)), "Something new");
 
 
     } catch (Exception e){
