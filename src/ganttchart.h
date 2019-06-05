@@ -1,8 +1,8 @@
 #ifndef GANTTCHART_H
 #define GANTTCHART_H
 #include <QDateTime>
-#include <timeline.h>
-#include <iterator.h>
+#include "timeline.h"
+#include "iterator.h"
 
 template <class T>
 class GanttChart

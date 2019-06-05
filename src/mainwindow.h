@@ -30,4 +30,4 @@ private:
     itemdialog *itemDialog;
 };
 
-#endif // MAINWINDOW_H
+#endif
