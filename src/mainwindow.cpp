@@ -25,6 +25,15 @@ MainWindow::MainWindow(QWidget *parent) :
     Serializer<GanttChart<std::string>>& serializer = Serializer<GanttChart<std::string>>::instance();
     serializer.importFromJson(Diagram);
 
+    // Make colors vector for Gantt chart drawing
+    colors = new QVector<QColor>();
+    colors->push_back(Qt::red);
+    colors->push_back(Qt::magenta);
+    colors->push_back(Qt::blue);
+    colors->push_back(Qt::yellow);
+
+
+
 ////   // Timeline
 //    Timeline<std::string> *firstTimeline = new Timeline<std::string>("First_long_Timeline", QDateTime(QDate(2008,1,1), QTime(0,0)), QDateTime(QDate(2019,1,1), QTime(0,0)));
 
@@ -140,24 +149,39 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 
-
-
-void MainWindow::drawTimeLineItem(TimelineItem<std::string> item, QColor color)
+void MainWindow::resizeGanttArea(int row)
 {
-    qDebug() << "Dates: " << item.getStart().toString() << " -> " << item.getEnd().toString();
+    QTableWidget *wg = ui->tableWidget;
+    wg->setColumnCount(1+7*24);
+    wg->setRowCount(2+row);
+    wg->clear();
+
+    int clSize = 25 /*(wg->width() - wg->columnWidth(0))/(7*24)*/;
+    for (int i=1; i < wg->columnCount(); i++)
+    {
+        wg->setColumnWidth(i, clSize);
+    }
+
+}
+
+void MainWindow::drawTimeLineItem(TimelineItem<std::string> item, int row, QColor color)
+{
+//    qDebug() << "Dates: " << item.getStart().toString() << " -> " << item.getEnd().toString();
     QDateTime startDate = item.getStart();
     QDateTime endDate = item.getEnd();
 
     qint64 intervalSec = startDate.secsTo(endDate);
-    qDebug() << "\tTime diff ms: " <<QString::number(intervalSec);
+//    qDebug() << "\tTime diff ms: " <<QString::number(intervalSec);
 
     qint64 intervalH = intervalSec/3600;
-    intervalH = (intervalSec%3600 > 0) ? intervalH+1 : intervalH;
-    qDebug() << "\tTime diff h: " <<QString::number(intervalH);
+    // Проверка на то, что задача длится в неполные часы (час начала и час конца)
+    intervalH = (startDate.time().minute() != 0) ? intervalH+1 : intervalH;
+    intervalH = (endDate.time().minute() != 0) ? intervalH+1 : intervalH;
+//    qDebug() << "\tTime diff h: " <<QString::number(intervalH);
 
     int dayOfWeek = startDate.date().dayOfWeek();
     int hour = startDate.time().hour();
-    qDebug() << "Start date: " << dayOfWeek << ": " << hour;
+//    qDebug() << "Start date: dayOfWeek" << dayOfWeek << "; " << hour << "h";
 
     QTableWidget *wg = ui->tableWidget;
 
@@ -166,14 +190,18 @@ void MainWindow::drawTimeLineItem(TimelineItem<std::string> item, QColor color)
     {
         QTableWidgetItem *task = new QTableWidgetItem;
         task->setBackground(color);
-        wg->setItem(2, 1+hour+i, task);  // setItem(<item_index>, <column>, task)!!!
+        wg->setItem(2+row, (dayOfWeek-1)*24 + 1+hour+i, task);  // setItem(<item_index>, <column>, task)!!!
     }
+
+    // Show item name
+    QTableWidgetItem *task = new QTableWidgetItem;
+    task->setText(QString::fromStdString(item.getContent()));
+    wg->setItem(2+row, 0, task);
 }
 
-void MainWindow::drawGantt()
+void MainWindow::drawGanntHeader()
 {
     QTableWidget *wg = ui->tableWidget;
-    wg->clear();
 
     // Заполняем шапку с часами
     for (int i = 0; i < 7; i++) // Проходим по дням недели, объединяя часы в дни
@@ -224,13 +252,24 @@ void MainWindow::drawGantt()
         task->setText(QString::number(i%24));
         wg->setItem(1, 1+i, task);
     }
+}
 
+void MainWindow::drawGantt()
+{
+    QColor color(255,0,0);  // Цвет заливки времени
 
-    // *** Show 1 TimeLineItem (Timelines[0]) ***
-    QColor color(255,0,0);
-    TimelineItem<std::string> item = Diagram->getTimelines()->at(0).getIntervals()->at(0);
+    std::vector<TimelineItem<std::string>> *timeLineItems = Diagram->getTimelines()->at(2).getIntervals();
+    int itemNubmer = timeLineItems->size();
 
-    drawTimeLineItem(item, color);
+    resizeGanttArea(itemNubmer);    // Меняем кол-во строк в таблице (кол-во задач)
+    drawGanntHeader();              // Заполняем шапку с часами
+
+    for (int i=0; i < timeLineItems->size(); i++)
+    {
+        TimelineItem<std::string> item = timeLineItems->at(i);
+//        drawTimeLineItem(item, i, color);
+        drawTimeLineItem(item, i, colors->at(i%colors->size()));  // FORWARD LINE NUMBER!!!
+    }
 }
 
 MainWindow::~MainWindow()

@@ -34,9 +34,13 @@ private slots:
 private:
     Ui::MainWindow *ui;
     itemdialog *itemDialog;
+    QVector<QColor> *colors;
 
+    void resizeGanttArea(int row);
+    void drawGanntHeader();
     void drawGantt();
-    void drawTimeLineItem(TimelineItem<std::string> item, QColor color=QColor(0,0,255));
+    void drawTimeLineItem(TimelineItem<std::string> item, int row, QColor color=QColor(0,0,255));
+    void drawTimeLine(Timeline<std::string> timeL);
 };
 
 #endif
