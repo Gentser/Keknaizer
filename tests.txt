@@ -272,3 +272,48 @@ for(auto iter=Diagram->getTimelines()->begin(); iter!= Diagram->getTimelines()->
 //    }
 
 *************************
+
+
+//Нужные ли эти методы (если будем делать Timeline-ы как недели)
+//    editTimelineStartTime(){
+
+//    }
+
+//    editTimelineEndTime(){
+
+//    }
+
+//    editTimelineAllTime(){
+
+//    }
+
+
+*************************
+
+//        Diagram->deleteItemFromTimeline(&Diagram->getTimelines()->at(0), "Something new");
+
+
+*************************
+
+//Нерабочий вариант
+
+//    bool deleteTimeline(Timeline<T> *curTimeline){
+//        if(curTimeline != nullptr){
+//            if(curTimeline->deleteAllItems()){
+//                for(auto iter = this->timelines->begin(); iter != this->timelines->end(); ++iter){
+//                    if(curTimeline->getName() == iter->getName()){
+//                        this->timelines->erase(iter);
+//                        return true;
+//                    }
+//                }
+//            }
+//        }
+//        else throw NotExistingTimelineException();
+//    }
+
+***************************
+
+//Глупое удаление
+
+Diagram->deleteTimeline(&Diagram->getTimelines()->at(0)); //&Diagram->getTimelines()->at(0)
+
