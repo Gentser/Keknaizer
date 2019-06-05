@@ -20,6 +20,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    curDay = ui->calendarWidget->selectedDate();
+
+
+
     Diagram = new GanttChart<std::string>();
 
     Serializer<GanttChart<std::string>>& serializer = Serializer<GanttChart<std::string>>::instance();
@@ -285,9 +289,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_PushButton_addTask_clicked()
 {
-    itemDialog = new itemdialog;
+
+    itemDialog = new itemdialog(QDateTime(curDay, QTime(1,0)), QDateTime(curDay, QTime(23,50)), Diagram);
     itemDialog->setModal(true);
     itemDialog->setTitleName("Добававление задачи");
+
+
     itemDialog->exec();
 
     // Redraw Gantt chart
@@ -296,7 +303,7 @@ void MainWindow::on_PushButton_addTask_clicked()
 
 void MainWindow::on_PushButton_editTask_clicked()
 {
-    itemDialog = new itemdialog;
+    itemDialog = new itemdialog(QDateTime(curDay, QTime(1,0)), QDateTime(curDay, QTime(23,50)), Diagram);
     itemDialog->setModal(true);
     itemDialog->setTitleName("Изменение задачи");
     itemDialog->exec();
@@ -304,6 +311,8 @@ void MainWindow::on_PushButton_editTask_clicked()
 
 void MainWindow::on_calendarWidget_clicked(const QDate &date)
 {
+
+    curDay = date;
     QMessageBox msgBox;
 //    qDebug() << date;
     curTimeline = Diagram->checkExisting(QDateTime(date));

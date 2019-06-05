@@ -23,6 +23,8 @@ public:
 
     Timeline<std::string> *curTimeline;
 
+    QDate curDay;
+
 
 
 private slots:
