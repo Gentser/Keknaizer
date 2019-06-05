@@ -9,6 +9,8 @@
 #include "exception.h"
 #include "serializer.h"
 
+#include <QMessageBox>
+
 
 #include <QDebug>
 
@@ -114,6 +116,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     try{
 
+//        Diagram->addTimeline(new Timeline<std::string>("TEST", QDateTime(QDate(2019,6,17)),
+//                                                               QDateTime(QDate(2019,6,23), QTime(23,59))));
+
 
     } catch (Exception e){
 
@@ -218,4 +223,20 @@ void MainWindow::on_PushButton_editTask_clicked()
     itemDialog->setModal(true);
     itemDialog->setTitleName("Изменение задачи");
     itemDialog->exec();
+}
+
+void MainWindow::on_calendarWidget_clicked(const QDate &date)
+{
+    QMessageBox msgBox;
+//    qDebug() << date;
+    curTimeline = Diagram->checkExisting(QDateTime(date));
+    if(curTimeline == nullptr){
+
+        msgBox.setText("На этой неделе у вас не существует записей (нет Timeline-ов)!");
+        msgBox.exec();
+    } else{
+        msgBox.setText("СУЩЕСТВУЕТ");
+        msgBox.exec();
+    }
+
 }
