@@ -279,6 +279,14 @@ public:
         else throw TheSameNameException(newContent);
     }
 
+    bool deleteAllItems(){
+//        for(auto iter = this->intervals->begin(); iter != this->intervals->end(); ++iter){
+//            this->intervals->erase(iter);
+//        }
+        this->intervals->clear();
+        return true;
+    }
+
 };
 
 //New for GITHUB

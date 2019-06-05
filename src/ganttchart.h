@@ -71,8 +71,6 @@ public:
     //               }
 
 
-    //New for GITHUB
-
     //EditItems
     bool editTimelineItem(std::string nameOfTimeline, T oldContent, T newContent, QDateTime newStart, QDateTime newEnd){
         Timeline<T> *timelineToChange = this->findTimeline(nameOfTimeline);
@@ -88,10 +86,18 @@ public:
         }
     }
 
-    bool deleteItem(std::string nameOfTimeline,  T content){
-        Timeline<T> *timelineToChange = this->findTimeline(nameOfTimeline);
-        timelineToChange->deleteItemByName(content);
-        return true;
+//    bool deleteItem(std::string nameOfTimeline,  T content){
+//        Timeline<T> *timelineToChange = this->findTimeline(nameOfTimeline);
+//        timelineToChange->deleteItemByName(content);
+//        return true;
+//    }
+
+    bool deleteItemFromTimeline(Timeline<T> *curTimeline, T content ){
+        if(curTimeline != nullptr){
+            curTimeline->deleteItemByName(content);
+            return true;
+        }
+        else throw NoTimelineForDeleteException(content);
     }
 
     //EditTimelines
@@ -123,19 +129,6 @@ public:
         else throw TheSameTimelineNameException(newName);
     }
 
-    //Нужные ли эти методы (если будем делать Timeline-ы как недели)
-//    editTimelineStartTime(){
-
-//    }
-
-//    editTimelineEndTime(){
-
-//    }
-
-//    editTimelineAllTime(){
-
-//    }
-
     //Проверка на существование Timeline-а с днем из календаря
     Timeline<T> *checkExisting(QDateTime checkTimeStart){
         int i = 0;
@@ -164,6 +157,54 @@ public:
         else timelineForAddingItem->addItem(new TimelineItem<T>(newStart, newEnd, newContent));
     }
 
+    //Удаление Работает хреново
+//    bool deleteAllTimelines(){
+//        if(!this->timelines->empty()){
+//            int i = 0;
+//            for(auto iter = this->timelines->begin(); iter != this->timelines->end(); ++iter, i++){
+//                this->deleteTimeline(&this->timelines->at(i));
+//            }
+//            this->timelines->clear();
+//            return true;
+//        }
+//        return false;
+
+//    }
+
+
+
+    bool deleteTimeline(Timeline<T> *curTimeline){
+        if(curTimeline != nullptr){
+            for(auto iter = this->timelines->begin(); iter != this->timelines->end(); ++iter){
+                if(curTimeline->getName() == iter->getName()){
+                    this->timelines->erase(iter);
+                    return true;
+                }
+            }
+        }
+        else throw NotExistingTimelineException();
+    }
+
+    bool deleteTimelineByName(std::string name){
+//        if(curTimeline != nullptr){
+//        if(this->findTimeline())
+        Timeline<T> *timelineToDelete = this->findTimeline(name);
+        if(timelineToDelete->deleteAllItems()){
+            for(auto iter = this->timelines->begin(); iter!=this->timelines->end(); ++iter){
+                if(timelineToDelete->getName() == iter->getName()){
+                    this->timelines->erase(iter);
+                    return true;
+                }
+            }
+        }
+//        }
+//        else throw NotExistingTimelineException();
+    }
+
+    bool deleteAll(){
+        this->timelines->clear();
+        return true;
+    }
 
 
 };
