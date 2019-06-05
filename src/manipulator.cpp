@@ -10,7 +10,7 @@
 
 Manipulator::Manipulator() {
     #if (defined (_WIN32) || defined (_WIN64))
-        pathToFile = "new_New_mask1.json"; //resolve this
+        pathToFile = "gantt.json"; //resolve this
     #endif
 }
 
@@ -37,7 +37,7 @@ void Manipulator::write(QJsonObject json) {
     QJsonDocument json_doc(json);
     QString json_string = json_doc.toJson();
 
-    QFile save_file("new_" + pathToFile);
+    QFile save_file(pathToFile); //"new_" +
     if (save_file.exists())
         save_file.remove();
    // if (!save_file.open(QIODevice::WriteOnly)) {
