@@ -139,6 +139,37 @@ MainWindow::MainWindow(QWidget *parent) :
 
 }
 
+
+
+
+void MainWindow::drawTimeLineItem(TimelineItem<std::string> item, QColor color)
+{
+    qDebug() << "Dates: " << item.getStart().toString() << " -> " << item.getEnd().toString();
+    QDateTime startDate = item.getStart();
+    QDateTime endDate = item.getEnd();
+
+    qint64 intervalSec = startDate.secsTo(endDate);
+    qDebug() << "\tTime diff ms: " <<QString::number(intervalSec);
+
+    qint64 intervalH = intervalSec/3600;
+    intervalH = (intervalSec%3600 > 0) ? intervalH+1 : intervalH;
+    qDebug() << "\tTime diff h: " <<QString::number(intervalH);
+
+    int dayOfWeek = startDate.date().dayOfWeek();
+    int hour = startDate.time().hour();
+    qDebug() << "Start date: " << dayOfWeek << ": " << hour;
+
+    QTableWidget *wg = ui->tableWidget;
+
+    // Show timeline
+    for (int i=0; i < intervalH; i++)
+    {
+        QTableWidgetItem *task = new QTableWidgetItem;
+        task->setBackground(color);
+        wg->setItem(2, 1+hour+i, task);  // setItem(<item_index>, <column>, task)!!!
+    }
+}
+
 void MainWindow::drawGantt()
 {
     QTableWidget *wg = ui->tableWidget;
@@ -193,6 +224,13 @@ void MainWindow::drawGantt()
         task->setText(QString::number(i%24));
         wg->setItem(1, 1+i, task);
     }
+
+
+    // *** Show 1 TimeLineItem (Timelines[0]) ***
+    QColor color(255,0,0);
+    TimelineItem<std::string> item = Diagram->getTimelines()->at(0).getIntervals()->at(0);
+
+    drawTimeLineItem(item, color);
 }
 
 MainWindow::~MainWindow()

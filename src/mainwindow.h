@@ -36,6 +36,7 @@ private:
     itemdialog *itemDialog;
 
     void drawGantt();
+    void drawTimeLineItem(TimelineItem<std::string> item, QColor color=QColor(0,0,255));
 };
 
 #endif
