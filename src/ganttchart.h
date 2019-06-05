@@ -94,6 +94,12 @@ public:
 
     }
 
+    bool deleteItem(std::string nameOfTimeline,  T content){
+        Timeline<T> *timelineToChange = this->findTimeline(nameOfTimeline);
+        timelineToChange->deleteItemByName(content);
+        return true;
+    }
+
     //EditTimelines
     bool checkFreeTimelineName(std::string newName){
         for(auto iter = this->getTimelines()->begin(); iter != this->getTimelines()->end(); ++iter){

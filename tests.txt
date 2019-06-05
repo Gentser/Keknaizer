@@ -250,3 +250,13 @@ for(auto iter=Diagram->getTimelines()->begin(); iter!= Diagram->getTimelines()->
 }
 
 *************************
+
+
+//        Diagram->addTimelineItem("thirdTimeline", QDateTime(QDate(2005,2,20), QTime(13,59)),
+//                                                  QDateTime(QDate(2006,2,20), QTime(17,22)),
+//                                                  "Suck cocks a lot");
+
+//        Diagram->editTimelineItem("thirdTimeline",  "Diff", "SUDASMOTRI",
+//                                  QDateTime(QDate(2012,1,3), QTime(13,59)),QDateTime(QDate(2015,10,20), QTime(17,22)) );
+
+//        Diagram->deleteItem("thirdTimeline", "SUDASMOTRI");
