@@ -23,3 +23,230 @@ try{
 }
 
 *******************************
+//    //Только для тетсирования
+//    for (int i = 0; i < Diagram->getTimelines()->at(0).getIntervals()->size(); i++){
+//        Diagram->getTimelines()->at(0).getIntervals()->at(i).print();
+//    }
+
+*******************************
+
+//ТУТ ПРОБЛЕМА С ИТЕРАТОРОМ(который написали)
+//    for (auto iter = Diagram->getTimelines().at(0).begin();
+//         iter != Diagram->getTimelines().at(0).end(); ++iter){
+//        iter->get_value.print();
+//    }
+
+*******************************
+qDebug() << "================" ;
+firstTimeline->findItemByName("Задача")->print();
+qDebug() << "НАШЛАСЬ" ;
+
+
+********************************
+
+
+firstTimeline->editItemTimeByContent("Задача", QDateTime(QDate(2099,5,1), QTime(17,59)),
+                                     QDateTime(QDate(3000,5,1), QTime(17,59)));
+
+qDebug() << "АПОСЛЯ РЕДАКТИРОВАНИЯ ============" ;
+int i = 0;
+for (auto iter = Diagram->getTimelines()->at(0).getIntervals()->begin();
+     iter != Diagram->getTimelines()->at(0).getIntervals()->end(); ++iter){
+    qDebug() << "Итерация " << i++ << "name= " << QString::fromStdString(iter->getContent());
+    iter->print();
+}
+
+*******************************
+
+//            qDebug() << "Добавить тот же item";
+//            firstTimeline->addItem(item);
+
+*******************************
+
+
+TimelineItem <std::string> *SomeItem = new TimelineItem<std::string>(QDateTime(QDate(2009,1,1), QTime(0,0)),
+                                               QDateTime(QDate(2009,2,3), QTime(15,35)),
+                                               std::string("new"));
+
+firstTimeline->addItem(SomeItem);
+
+
+*******************************
+//Find ItemByName Test from Timeline
+
+
+firstTimeline->deleteItemByName("А это вторая задача!");
+
+firstTimeline->editItemTimeByContent("Задача",
+                                     QDateTime(QDate(2000,3,5), QTime(17,59)),
+                                     QDateTime(QDate(2010,3,5), QTime(17,59)));
+
+qDebug() << "АПОСЛЯ РЕДАКТИРОВАНИЯ ============" ;
+int i = 0;
+for (auto iter = Diagram->getTimelines()->at(0).getIntervals()->begin();
+     iter != Diagram->getTimelines()->at(0).getIntervals()->end(); ++iter){
+    qDebug() << "Итерация " << i++ << "name= " << QString::fromStdString(iter->getContent());
+    iter->print();
+}
+
+
+*******************************
+//Изменение имения у Timeline-а самим таймлайном
+qDebug() << "Старое имя" << QString::fromStdString(second->getName());
+
+second->changeNameOfTimeline("ПОМЕНЯЛ ИМЯ");
+
+qDebug() << "Новое имя" << QString::fromStdString(second->getName());
+
+
+********************************
+//Тест edit of Start в Timeline
+
+qDebug() << "Before edit Start" ;
+qDebug() << second->getStartDate().toString();
+second->changeStartDate(QDateTime(QDate(2000,2,20), QTime(18,59)));
+qDebug() << "After edit Start" ;
+qDebug() << second->getStartDate().toString();
+
+
+
+*******************************
+//Тест edit of End в Timeline
+
+qDebug() << "Before edit End" ;
+qDebug() << second->getEndDate().toString();
+second->changeEndDate(QDateTime(QDate(2018,2,20), QTime(18,59)));
+qDebug() << "After edit End" ;
+qDebug() << second->getEndDate().toString();
+
+
+******************************
+
+//Тест edit ALL в Timeline
+
+qDebug() << "Before edit All" ;
+qDebug() << second->getStartDate().toString() << " and " << second->getEndDate().toString();
+second->changeAllDates(QDateTime(QDate(2009,2,20), QTime(18,59)),
+                       QDateTime(QDate(2019,2,20), QTime(18,59)));
+qDebug() << "After edit All" ;
+qDebug() << second->getStartDate().toString() << " and " << second->getEndDate().toString();
+
+
+=======
+Edit contents in Items
+*******************************
+//Тестирование edit-ing в Item-ах
+
+//    qDebug() << "Before " << QString::fromStdString(item->getContent());
+
+//    item->editConntentByContent(std::string("Has been Edited"));
+
+//    qDebug() << "After " << QString::fromStdString(item->getContent());
+
+//    Diagram->getTimelines()->at(0).getIntervals()->at(0).editConntentByContent("NEW HERE");
+
+
+Edit times in Items
+*******************************
+
+
+try{
+    Diagram->getTimelines()->at(0).getIntervals()->at(2).editStartByContent(
+                            QDateTime(QDate(2000,1,1), QTime(0,0)));
+} catch (EditTimeException e){
+    qCritical() << "CATCH EXCEPT" << QString::fromStdString(e.getMessage());
+}
+
+*******************************
+//    //Только для тетсирования
+//    for (int i = 0; i < Diagram->getTimelines()->at(0).getIntervals()->size(); i++){
+//        Diagram->getTimelines()->at(0).getIntervals()->at(i).print();
+//    }
+
+*******************************
+
+//ТУТ ПРОБЛЕМА С ИТЕРАТОРОМ(который написали)
+//    for (auto iter = Diagram->getTimelines().at(0).begin();
+//         iter != Diagram->getTimelines().at(0).end(); ++iter){
+//        iter->get_value.print();
+//    }
+
+*******************************
+qDebug() << "================" ;
+firstTimeline->findItemByName("Задача")->print();
+qDebug() << "НАШЛАСЬ" ;
+
+
+********************************
+
+
+firstTimeline->editItemTimeByContent("Задача", QDateTime(QDate(2099,5,1), QTime(17,59)),
+                                     QDateTime(QDate(3000,5,1), QTime(17,59)));
+
+qDebug() << "АПОСЛЯ РЕДАКТИРОВАНИЯ ============" ;
+int i = 0;
+for (auto iter = Diagram->getTimelines()->at(0).getIntervals()->begin();
+     iter != Diagram->getTimelines()->at(0).getIntervals()->end(); ++iter){
+    qDebug() << "Итерация " << i++ << "name= " << QString::fromStdString(iter->getContent());
+    iter->print();
+}
+
+*******************************
+
+//            qDebug() << "Добавить тот же item";
+//            firstTimeline->addItem(item);
+
+*******************************
+
+
+TimelineItem <std::string> *SomeItem = new TimelineItem<std::string>(QDateTime(QDate(2009,1,1), QTime(0,0)),
+                                               QDateTime(QDate(2009,2,3), QTime(15,35)),
+                                               std::string("new"));
+
+firstTimeline->addItem(SomeItem);
+
+
+*******************************
+//Find ItemByName Test from Timeline
+
+
+firstTimeline->deleteItemByName("А это вторая задача!");
+
+firstTimeline->editItemTimeByContent("Задача",
+                                     QDateTime(QDate(2000,3,5), QTime(17,59)),
+                                     QDateTime(QDate(2010,3,5), QTime(17,59)));
+
+qDebug() << "АПОСЛЯ РЕДАКТИРОВАНИЯ ============" ;
+int i = 0;
+for (auto iter = Diagram->getTimelines()->at(0).getIntervals()->begin();
+     iter != Diagram->getTimelines()->at(0).getIntervals()->end(); ++iter){
+    qDebug() << "Итерация " << i++ << "name= " << QString::fromStdString(iter->getContent());
+    iter->print();
+}
+
+
+**************************
+qDebug() << "Name of thirdTimeline " << QString::fromStdString(thirdTimeline->getName());
+
+qDebug() << "Before edit All" ;
+qDebug() << thirdTimeline->getStartDate().toString() << " and " << thirdTimeline->getEndDate().toString();
+thirdTimeline->changeAllDates(QDateTime(QDate(2009,2,20), QTime(18,59)),
+                       QDateTime(QDate(2019,2,20), QTime(18,59)));
+qDebug() << "After edit All" ;
+qDebug() << thirdTimeline->getStartDate().toString() << " and " << thirdTimeline->getEndDate().toString();
+
+**************************
+
+
+for(auto iter=Diagram->getTimelines()->begin(); iter!= Diagram->getTimelines()->end(); ++iter){
+    qDebug() << QString::fromStdString(iter->getName());
+}
+
+qDebug() << "РЕДАКТИРОВАНИЕ" ;
+Diagram->editTimelineName("asf", "newName");
+
+for(auto iter=Diagram->getTimelines()->begin(); iter!= Diagram->getTimelines()->end(); ++iter){
+    qDebug() << QString::fromStdString(iter->getName());
+}
+
+*************************
