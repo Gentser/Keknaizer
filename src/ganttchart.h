@@ -88,12 +88,6 @@ public:
         }
     }
 
-    bool addTimelineItem(std::string nameOfTimeline,  QDateTime newStart, QDateTime newEnd, T newContent){
-        Timeline<T> *timelineToChange = this->findTimeline(nameOfTimeline);
-        timelineToChange->addItem(new TimelineItem<T>(newStart, newEnd, newContent));
-
-    }
-
     bool deleteItem(std::string nameOfTimeline,  T content){
         Timeline<T> *timelineToChange = this->findTimeline(nameOfTimeline);
         timelineToChange->deleteItemByName(content);
@@ -141,6 +135,34 @@ public:
 //    editTimelineAllTime(){
 
 //    }
+
+    //Проверка на существование Timeline-а с днем из календаря
+    Timeline<T> *checkExisting(QDateTime checkTimeStart){
+        int i = 0;
+        for(auto iter = this->timelines->begin(); iter!= this->timelines->end(); ++iter, i++){
+            if(iter->getStartDate() <= checkTimeStart && checkTimeStart <= iter->getEndDate()){
+                return &this->timelines->at(i);
+            }
+        }
+        return nullptr; //Возврат пустого указателя, если нет такого таймлайна
+    }
+
+
+    bool addItemNew(QDateTime newStart, QDateTime newEnd, T newContent){ // с проверкой на наличие соответствующего timeline-а
+        Timeline<T> *timelineForAddingItem = checkExisting(newStart);
+        if(timelineForAddingItem == nullptr){
+            //Добавление нового таймлайна автоматически
+            QDateTime startOfWeek = QDateTime(QDate(newStart.date().addDays(-newStart.date().dayOfWeek()+1)));
+            QDateTime endOfWeek = QDateTime(QDate(startOfWeek.date().addDays(6)), QTime(23,59));
+            std::string nameOfTimeline = "Week_" + QString::number(startOfWeek.date().weekNumber()).toStdString() + "_" +  QString::number(startOfWeek.date().year()).toStdString();
+            Timeline<T> *newTimeline = new Timeline<T>(nameOfTimeline, startOfWeek, endOfWeek);
+            this->addTimeline(newTimeline);
+            //Добавление нового итема в таймлайн
+            timelineForAddingItem = checkExisting(newStart);
+            timelineForAddingItem->addItem(new TimelineItem<T>(newStart, newEnd, newContent));
+        }
+        else timelineForAddingItem->addItem(new TimelineItem<T>(newStart, newEnd, newContent));
+    }
 
 
 
