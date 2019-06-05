@@ -114,6 +114,7 @@ public:
     }
 
      //Времменный костыль
+     //Надо ставить !() == так правильно, типа не нашлось такого имени
      bool findWithoutException(T content){
          for(auto iter = this->intervals->begin(); iter != this->intervals->end(); ++iter){
              if(iter->getContent() == content){
@@ -257,6 +258,25 @@ public:
             else throw TimelineEndBorderException(newEndDate, maxDateOfItem);
         }
         else throw TimelineStartBorderException(newStartDate, this->intervals->front().getStart());
+    }
+
+
+    //NEW EDIT METHOD
+    bool editItemData(T oldContent, T newContent, QDateTime newStart, QDateTime newEnd){
+        TimelineItem<T> *itemToChange = this->findItemByName(oldContent);
+        if(!findWithoutException(newContent)){
+            if (checkEndBorder(newEnd) && checkStartBorder(newStart)){
+                itemToChange->editTimeByContent(newStart,newEnd);
+                //А теперь редактируем имя
+                itemToChange->editConntentByContent(newContent);
+                this->sortIntervals(); //Сортировка интервалов
+
+                return true;
+            }
+            else throw TimelineBorderException(newStart, newEnd, this->getStartDate(),this->getEndDate());
+
+        }
+        else throw TheSameNameException(newContent);
     }
 
 };

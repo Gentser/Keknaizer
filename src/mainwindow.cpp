@@ -112,6 +112,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
 //    }
 
+    try{
+
+    } catch (Exception e){
+
+    }
+
 
 
 
