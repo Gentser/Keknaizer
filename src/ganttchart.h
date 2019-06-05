@@ -74,7 +74,25 @@ public:
     //New for GITHUB
 
     //EditItems
+    bool editTimelineItem(std::string nameOfTimeline, T oldContent, T newContent, QDateTime newStart, QDateTime newEnd){
+        Timeline<T> *timelineToChange = this->findTimeline(nameOfTimeline);
+        if(oldContent == newContent){
+            //Редактирование только времени
+            timelineToChange->editItemTimeByContent(oldContent, newStart, newEnd);
+            return true;
+        }
+        //редактирование имени и времени
+        else {
+            timelineToChange->editItemData(oldContent, newContent, newStart, newEnd);
+            return true;
+        }
+    }
 
+    bool addTimelineItem(std::string nameOfTimeline,  QDateTime newStart, QDateTime newEnd, T newContent){
+        Timeline<T> *timelineToChange = this->findTimeline(nameOfTimeline);
+        timelineToChange->addItem(new TimelineItem<T>(newStart, newEnd, newContent));
+
+    }
 
     //EditTimelines
     bool checkFreeTimelineName(std::string newName){
