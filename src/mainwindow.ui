@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>782</width>
-    <height>581</height>
+    <height>621</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -191,61 +191,95 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
           <item row="0" column="0">
-           <widget class="QTreeWidget" name="treeWidget">
+           <widget class="QTableWidget" name="tableWidget">
+            <property name="rowCount">
+             <number>6</number>
+            </property>
+            <property name="columnCount">
+             <number>6</number>
+            </property>
+            <attribute name="horizontalHeaderVisible">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="horizontalHeaderMinimumSectionSize">
+             <number>10</number>
+            </attribute>
+            <attribute name="verticalHeaderVisible">
+             <bool>false</bool>
+            </attribute>
+            <row>
+             <property name="text">
+              <string>a</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>f</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>b</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>c</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>d</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>e</string>
+             </property>
+            </row>
             <column>
              <property name="text">
-              <string>Задача</string>
-             </property>
-             <property name="font">
-              <font>
-               <weight>75</weight>
-               <bold>true</bold>
-              </font>
+              <string>1</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Понедельник</string>
+              <string>2</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Вторник</string>
+              <string>3</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Среда</string>
+              <string>4</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Четверг</string>
+              <string>5</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Пятница</string>
+              <string>6</string>
              </property>
             </column>
-            <column>
+            <item row="0" column="0">
              <property name="text">
-              <string>Суббота</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>Воскресенье</string>
-             </property>
-            </column>
-            <item>
-             <property name="text">
-              <string>Кекнуться</string>
+              <string>15см</string>
              </property>
             </item>
-            <item>
+            <item row="1" column="0">
              <property name="text">
-              <string>Потрогать лысину Максима</string>
+              <string>9,9см</string>
+             </property>
+            </item>
+            <item row="2" column="0">
+             <property name="text">
+              <string>19см</string>
              </property>
             </item>
            </widget>

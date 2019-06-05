@@ -120,8 +120,74 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
 
+    // Change Gantt Chart
+    QTableWidget *wg = ui->tableWidget;
+    wg->setRowCount(3);
+    wg->clear();
+    wg->setColumnCount(1+7*24);
 
+    int clSize = 25 /*(wg->width() - wg->columnWidth(0))/(7*24)*/;
+    for (int i=1; i < wg->columnCount(); i++)
+        wg->setColumnWidth(i, clSize);
 
+    drawGantt();
+
+}
+
+void MainWindow::drawGantt()
+{
+    QTableWidget *wg = ui->tableWidget;
+    wg->clear();
+
+    // Заполняем шапку с часами
+    for (int i = 0; i < 7; i++) // Проходим по дням недели, объединяя часы в дни
+    {
+        wg->setSpan(0, 1+i*24, 1, 24);
+        QTableWidgetItem *task = new QTableWidgetItem;
+        task->setTextAlignment(Qt::AlignVCenter);
+        task->setFont(QFont("Times", 10, QFont::Bold));
+        if (i%2==0)
+            task->setBackground(Qt::gray);
+
+        switch (i) {
+            case 0:
+                task->setText("Понедельник");
+                break;
+            case 1:
+                task->setText("Вторник");
+                break;
+            case 2:
+                task->setText("Среда");
+                break;
+            case 3:
+                task->setText("Четверг");
+                break;
+            case 4:
+                task->setText("Пятница");
+                break;
+            case 5:
+                task->setText("Суббота");
+                break;
+            case 6:
+                task->setText("Воскресенье");
+                break;
+        }
+
+        wg->setItem(0, 1+i*24, task);
+    }
+
+    for (int i = 0; i < 24*7; i++) // Проходим по дням недели и рисуем каждый час
+    {
+        QTableWidgetItem *task = new QTableWidgetItem;
+        task->setTextAlignment(Qt::AlignVCenter);
+        //        QFont font(QFont("Helvetica [Cronyx]", 8, QFont::DemiBold));
+        //        task->setTextColor(Qt::gray);
+        QFont font(QFont("Helvetica [Cronyx]", 8, QFont::Light));
+        font.setStyle(QFont::StyleItalic);
+        task->setFont(font);
+        task->setText(QString::number(i%24));
+        wg->setItem(1, 1+i, task);
+    }
 }
 
 MainWindow::~MainWindow()
@@ -141,6 +207,9 @@ void MainWindow::on_PushButton_addTask_clicked()
     itemDialog->setModal(true);
     itemDialog->setTitleName("Добававление задачи");
     itemDialog->exec();
+
+    // Redraw Gantt chart
+    drawGantt();
 }
 
 void MainWindow::on_PushButton_editTask_clicked()
