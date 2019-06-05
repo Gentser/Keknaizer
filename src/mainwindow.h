@@ -28,6 +28,8 @@ private slots:
 private:
     Ui::MainWindow *ui;
     itemdialog *itemDialog;
+
+    void drawGantt();
 };
 
 #endif
