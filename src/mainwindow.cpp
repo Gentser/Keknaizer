@@ -26,8 +26,28 @@ MainWindow::MainWindow(QWidget *parent) :
     serializer.importFromJson(Diagram);
 
     // Устанавливаем текущую дату и TimeLine
-    curDay = ui->calendarWidget->selectedDate();
-    curTimeline = Diagram->checkExisting(QDateTime(curDay));
+//    // Take current day
+//    curDay = ui->calendarWidget->selectedDate();
+//    curTimeline = Diagram->checkExisting(QDateTime(curDay));
+
+    if (Diagram->getTimelines()->size() == 0 ||
+            Diagram->getTimelines()->at(0).getIntervals()->size()==0) { // Возможно, если кол-во Item в 1-ом TimeLine==0, следует переходить к следующему TimeLine
+        // Устанавливаем текущую дату и TimeLine
+        curDay = ui->calendarWidget->selectedDate();
+        curTimeline = Diagram->checkExisting(QDateTime(curDay));
+    } else {
+        // Устанавливаем дату первого TimeLine
+        curTimeline = &Diagram->getTimelines()->at(0);
+        QDateTime startDate = curTimeline->getIntervals()->at(0).getStart();
+        ui->calendarWidget->setSelectedDate(startDate.date());
+        curDay = startDate.date();
+    }
+
+    // Устанавливаем дату первого TimeLine
+    curTimeline = &Diagram->getTimelines()->at(0);
+    QDateTime startDate = curTimeline->getIntervals()->at(0).getStart();
+    ui->calendarWidget->setSelectedDate(startDate.date());
+    curDay = startDate.date();
 
     // Make colors vector for Gantt chart drawing
     colors = new QVector<QColor>();
