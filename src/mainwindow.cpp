@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     Diagram = new GanttChart<std::string>();
 
-    curTimeline = Diagram->checkExisting(QDateTime(curDay));
+    curTimeline = Diagram->checkExisting(QDateTime(curDay));    // НАДО УБРАТЬ - дублирует то, что снизу
 
     Serializer<GanttChart<std::string>>& serializer = Serializer<GanttChart<std::string>>::instance();
     serializer.importFromJson(Diagram);
@@ -40,9 +40,12 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->calendarWidget->setSelectedDate(startDate.date());
         curDay = startDate.date();
     }
-      
+
     // Текущий элемент для редактирования (+флаг - элемент для редактирования найден)
     curElem = -1;
+
+    // Текущий элемент для отображения при переходе между TimeLine
+    curTimeLineIndex = -1;
 
     // Make colors vector for Gantt chart drawing
     colors = new QVector<QColor>();
@@ -396,4 +399,73 @@ void MainWindow::on_PushButton_deleteTask_clicked()
     }
 
 
+}
+
+void MainWindow::on_pushButton_nextTimeLine_clicked()
+{
+    if (curTimeLineIndex > -1){
+        curTimeLineIndex++;
+    } else {
+
+        if (curTimeline == nullptr) {
+            curTimeLineIndex = Diagram->getTimelines()->size()-1;
+        } else {
+            curTimeLineIndex = Diagram->findTimelineIndex(curTimeline->getName());
+            if (curTimeLineIndex == -1) {
+                curTimeLineIndex = Diagram->getTimelines()->size()-1;
+            } else {
+                curTimeLineIndex++;
+            }
+        }
+    }
+
+    if (curTimeLineIndex > Diagram->getTimelines()->size()-1)
+        curTimeLineIndex = Diagram->getTimelines()->size()-1;
+
+    curTimeline = &Diagram->getTimelines()->at(curTimeLineIndex);
+    QDate date;
+    if (curTimeline->getIntervals()->size() > 0)
+        date = curTimeline->getIntervals()->at(0).getStart().date();
+    else
+        date = curTimeline->getStartDate().date();
+
+    ui->calendarWidget->setSelectedDate(date);
+    curDay = date;
+
+    // Redraw Gantt chart in right way
+    drawGantt();
+}
+
+void MainWindow::on_pushButton_prevTimeLine_clicked()
+{
+    if (curTimeLineIndex > -1){
+        curTimeLineIndex--;
+    } else {
+
+        if (curTimeline == nullptr) {
+            curTimeLineIndex = 0;
+        } else {
+            curTimeLineIndex = Diagram->findTimelineIndex(curTimeline->getName());
+            if (curTimeLineIndex == -1) {
+                curTimeLineIndex = 0;
+            } else {
+                curTimeLineIndex--;
+            }
+        }
+    }
+
+    curTimeLineIndex = (curTimeLineIndex < 0) ? 0 : curTimeLineIndex;
+
+    curTimeline = &Diagram->getTimelines()->at(curTimeLineIndex);
+    QDate date;
+    if (curTimeline->getIntervals()->size() > 0)
+        date = curTimeline->getIntervals()->at(0).getStart().date();
+    else
+        date = curTimeline->getStartDate().date();
+
+    ui->calendarWidget->setSelectedDate(date);
+    curDay = date;
+
+    // Redraw Gantt chart in right way
+    drawGantt();
 }
