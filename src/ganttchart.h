@@ -3,6 +3,9 @@
 #include <QDateTime>
 #include "timeline.h"
 #include "iterator.h"
+#include "invariant.h"
+
+
 
 template <class T>
 class GanttChart
@@ -12,7 +15,34 @@ private:
     QDateTime maxDate;
     std::vector<Timeline<T>> *timelines; // <TimelineItem<T>>
 
+
 public:
+//    template <class T>
+    class Invariant
+    {
+    public:
+        Invariant();
+        ~Invariant();
+
+        static bool isSorted(GanttChart<T> *container){
+            for(int i = 0; i < container->getTimelines()->size()-1;i++){
+                if(!(container->getTimelines()->at(i).getIntervals()->size() == 0)){
+                    for(int j = 0; j < container->getTimelines()->at(i).getIntervals()->size()-1; j++){
+                        if (container->getTimelines()->at(i).getIntervals()->at(j).getStart() > container->getTimelines()->at(i).getIntervals()->at(j+1).getStart()){
+                            return false;
+                        }
+                    }
+                    if(container->getTimelines()->at(i).getStartDate() > container->getTimelines()->at(i+1).getStartDate()){
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+    };
+
+
     GanttChart(){
         this->setMinDate(QDateTime(QDate(2000,1,1), QTime(0,0)));
         this->setMaxDate(QDateTime(QDate(2020,1,1), QTime(0,0)));
@@ -73,17 +103,20 @@ public:
 
     //EditItems
     bool editTimelineItem(std::string nameOfTimeline, T oldContent, T newContent, QDateTime newStart, QDateTime newEnd){
-        Timeline<T> *timelineToChange = this->findTimeline(nameOfTimeline);
-        if(oldContent == newContent){
-            //Редактирование только времени
-            timelineToChange->editItemTimeByContent(oldContent, newStart, newEnd);
-            return true;
+        if(GanttChart<T>::Invariant::isSorted(this)){
+            Timeline<T> *timelineToChange = this->findTimeline(nameOfTimeline);
+            if(oldContent == newContent){
+                //Редактирование только времени
+                timelineToChange->editItemTimeByContent(oldContent, newStart, newEnd);
+                return true;
+            }
+            //редактирование имени и времени
+            else {
+                timelineToChange->editItemData(oldContent, newContent, newStart, newEnd);
+                return true;
+            }
         }
-        //редактирование имени и времени
-        else {
-            timelineToChange->editItemData(oldContent, newContent, newStart, newEnd);
-            return true;
-        }
+        else return false;
     }
 
 //    bool deleteItem(std::string nameOfTimeline,  T content){
@@ -93,11 +126,14 @@ public:
 //    }
 
     bool deleteItemFromTimeline(Timeline<T> *curTimeline, T content ){
-        if(curTimeline != nullptr){
-            curTimeline->deleteItemByName(content);
-            return true;
+        if(GanttChart<T>::Invariant::isSorted(this)){
+
+            if(curTimeline != nullptr){
+                curTimeline->deleteItemByName(content);
+                return true;
+            }
+            else throw NoTimelineForDeleteException(content);
         }
-        else throw NoTimelineForDeleteException(content);
     }
 
     //EditTimelines
@@ -142,19 +178,21 @@ public:
 
 
     bool addItemNew(QDateTime newStart, QDateTime newEnd, T newContent){ // с проверкой на наличие соответствующего timeline-а
-        Timeline<T> *timelineForAddingItem = checkExisting(newStart);
-        if(timelineForAddingItem == nullptr){
-            //Добавление нового таймлайна автоматически
-            QDateTime startOfWeek = QDateTime(QDate(newStart.date().addDays(-newStart.date().dayOfWeek()+1)));
-            QDateTime endOfWeek = QDateTime(QDate(startOfWeek.date().addDays(6)), QTime(23,59));
-            std::string nameOfTimeline = "Week_" + QString::number(startOfWeek.date().weekNumber()).toStdString() + "_" +  QString::number(startOfWeek.date().year()).toStdString();
-            Timeline<T> *newTimeline = new Timeline<T>(nameOfTimeline, startOfWeek, endOfWeek);
-            this->addTimeline(newTimeline);
-            //Добавление нового итема в таймлайн
-            timelineForAddingItem = checkExisting(newStart);
-            timelineForAddingItem->addItem(new TimelineItem<T>(newStart, newEnd, newContent));
+        if(GanttChart<T>::Invariant::isSorted(this)){
+            Timeline<T> *timelineForAddingItem = checkExisting(newStart);
+            if(timelineForAddingItem == nullptr){
+                //Добавление нового таймлайна автоматически
+                QDateTime startOfWeek = QDateTime(QDate(newStart.date().addDays(-newStart.date().dayOfWeek()+1)));
+                QDateTime endOfWeek = QDateTime(QDate(startOfWeek.date().addDays(6)), QTime(23,59));
+                std::string nameOfTimeline = "Week_" + QString::number(startOfWeek.date().weekNumber()).toStdString() + "_" +  QString::number(startOfWeek.date().year()).toStdString();
+                Timeline<T> *newTimeline = new Timeline<T>(nameOfTimeline, startOfWeek, endOfWeek);
+                this->addTimeline(newTimeline);
+                //Добавление нового итема в таймлайн
+                timelineForAddingItem = checkExisting(newStart);
+                timelineForAddingItem->addItem(new TimelineItem<T>(newStart, newEnd, newContent));
+            }
+            else timelineForAddingItem->addItem(new TimelineItem<T>(newStart, newEnd, newContent));
         }
-        else timelineForAddingItem->addItem(new TimelineItem<T>(newStart, newEnd, newContent));
     }
 
     //Удаление Работает хреново
@@ -209,5 +247,7 @@ public:
 
 
 };
+
+
 
 #endif // GANTTCHART_H
