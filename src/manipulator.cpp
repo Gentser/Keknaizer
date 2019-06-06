@@ -10,7 +10,7 @@
 
 Manipulator::Manipulator() {
     #if (defined (_WIN32) || defined (_WIN64))
-        pathToFile = "gantt.json"; //resolve this
+        pathToFile = "new_gantt.json"; //resolve this
     #endif
 }
 
@@ -20,8 +20,8 @@ QJsonObject Manipulator::read() {
     if (!file.open(QIODevice::ReadOnly)) {
         throw std::exception(); // some file exception? pathToFile.toStdString()
     }
-    //QByteArray rawData = QByteArray::fromBase64(file.readAll());
-    QByteArray rawData = file.readAll();
+    QByteArray rawData = QByteArray::fromBase64(file.readAll());
+//    QByteArray rawData = file.readAll();
     file.close();
 
 
@@ -45,7 +45,7 @@ void Manipulator::write(QJsonObject json) {
     //}
 
     save_file.open(QIODevice::WriteOnly);
-    save_file.write(json_string.toLocal8Bit()); //.toBase64());
+    save_file.write(json_string.toLocal8Bit().toBase64()); //.toBase64());
 //    save_file.write(json_string.toLocal8Bit());
     save_file.close();
 }
