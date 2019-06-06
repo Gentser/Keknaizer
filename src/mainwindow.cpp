@@ -20,14 +20,14 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    curDay = ui->calendarWidget->selectedDate();
-
-
-
     Diagram = new GanttChart<std::string>();
 
     Serializer<GanttChart<std::string>>& serializer = Serializer<GanttChart<std::string>>::instance();
     serializer.importFromJson(Diagram);
+
+    // Устанавливаем текущую дату и TimeLine
+    curDay = ui->calendarWidget->selectedDate();
+    curTimeline = Diagram->checkExisting(QDateTime(curDay));
 
     // Make colors vector for Gantt chart drawing
     colors = new QVector<QColor>();
