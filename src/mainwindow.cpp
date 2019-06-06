@@ -8,6 +8,7 @@
 #include "iterator.h"
 #include "exception.h"
 #include "serializer.h"
+#include "invariant.h"
 
 #include <QMessageBox>
 
@@ -22,10 +23,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     Diagram = new GanttChart<std::string>();
 
-    curTimeline = Diagram->checkExisting(QDateTime(curDay));    // НАДО УБРАТЬ - дублирует то, что снизу
-
     Serializer<GanttChart<std::string>>& serializer = Serializer<GanttChart<std::string>>::instance();
     serializer.importFromJson(Diagram);
+
+    bool cool = GanttChart<std::string>::Invariant::isSorted(Diagram);
+
 
     // Определить текущие дату и день (текущее время, или данные из первого TimeLine)
     if (Diagram->getTimelines()->size() == 0 ||
@@ -166,7 +168,12 @@ MainWindow::MainWindow(QWidget *parent) :
     for (int i=1; i < wg->columnCount(); i++)
         wg->setColumnWidth(i, clSize);
 
-    drawGantt();
+    if(curTimeline != nullptr){
+        drawGantt();
+    }
+    else{
+        drawEmptyGantt();
+    }
 
 }
 
