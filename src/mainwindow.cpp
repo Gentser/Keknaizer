@@ -22,9 +22,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     curDay = ui->calendarWidget->selectedDate();
 
-
+    curElem = -1;
 
     Diagram = new GanttChart<std::string>();
+
+    curTimeline = Diagram->checkExisting(QDateTime(curDay));
 
     Serializer<GanttChart<std::string>>& serializer = Serializer<GanttChart<std::string>>::instance();
     serializer.importFromJson(Diagram);
@@ -290,9 +292,10 @@ MainWindow::~MainWindow()
 void MainWindow::on_PushButton_addTask_clicked()
 {
 
-    itemDialog = new itemdialog(QDateTime(curDay, QTime(1,0)), QDateTime(curDay, QTime(23,50)), Diagram);
+    itemDialog = new itemdialog(QDateTime(curDay, QTime(1,0)), QDateTime(curDay, QTime(23,50)), Diagram, curTimeline, curElem);
     itemDialog->setModal(true);
-    itemDialog->setTitleName("Добававление задачи");
+    itemDialog->setTitleName("Добавление задачи");
+    itemDialog->setWindowTitle("Добавление задачи");
 
 
     itemDialog->exec();
@@ -303,15 +306,16 @@ void MainWindow::on_PushButton_addTask_clicked()
 
 void MainWindow::on_PushButton_editTask_clicked()
 {
-    itemDialog = new itemdialog(QDateTime(curDay, QTime(1,0)), QDateTime(curDay, QTime(23,50)), Diagram);
+    itemDialog = new itemdialog(QDateTime(curDay, QTime(1,0)), QDateTime(curDay, QTime(23,50)), Diagram, curTimeline, curElem);
     itemDialog->setModal(true);
     itemDialog->setTitleName("Изменение задачи");
+    itemDialog->setWindowTitle("Изменение задачи");
     itemDialog->exec();
 }
 
 void MainWindow::on_calendarWidget_clicked(const QDate &date)
 {
-
+    curElem = -1;
     curDay = date;
     QMessageBox msgBox;
 //    qDebug() << date;
@@ -325,4 +329,21 @@ void MainWindow::on_calendarWidget_clicked(const QDate &date)
         msgBox.exec();
     }
 
+}
+
+void MainWindow::on_tableWidget_cellClicked(int row, int column)
+{
+    if(column == 0){
+        if(row >= 2){
+            curElem = row-2;
+            ui->PushButton_deleteTask->setEnabled(true);
+            ui->PushButton_editTask->setEnabled(true);
+//            qDebug() << row << "_" << column;
+            return;
+        }
+    }
+    curElem = -1;
+    ui->PushButton_deleteTask->setEnabled(false);
+    ui->PushButton_editTask->setEnabled(false);
+//    qDebug() << row << "_" << column;
 }

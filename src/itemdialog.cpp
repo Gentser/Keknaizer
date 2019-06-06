@@ -4,7 +4,7 @@
 #include "exception"
 #include <QMessageBox>
 
-itemdialog::itemdialog( QDateTime startOfWeek, QDateTime endOfWeek, GanttChart<std::string> *diag, QWidget *parent) : //new constructor
+itemdialog::itemdialog( QDateTime startOfWeek, QDateTime endOfWeek, GanttChart<std::string> *diag, Timeline<std::string> *timeline, int curElement, QWidget *parent) : //new constructor
     QDialog(parent),
     ui(new Ui::itemdialog)
 {
@@ -14,6 +14,21 @@ itemdialog::itemdialog( QDateTime startOfWeek, QDateTime endOfWeek, GanttChart<s
     ui->dateTimeEdit_End_2->setDateTime(endOfWeek);
 
     this->Diagram = diag;
+
+    this->curTimeline = timeline;
+
+    this->curElem = curElement;
+
+    if(this->curElem != -1){
+        ui->lineEdit_TaskName_2->setText(QString::fromStdString(timeline->getIntervals()->at(curElement).getContent()));
+        ui->dateTimeEdit_Begin_2->setDateTime(timeline->getIntervals()->at(curElement).getStart());
+        ui->dateTimeEdit_End_2->setDateTime(timeline->getIntervals()->at(curElement).getEnd());
+    }
+    else{
+        ui->dateTimeEdit_Begin_2->setDateTime(startOfWeek);
+        ui->dateTimeEdit_End_2->setDateTime(endOfWeek);
+
+    }
 }
 
 itemdialog::~itemdialog()
@@ -26,62 +41,37 @@ void itemdialog::setTitleName(QString name)
     ui->Title->setText(name);
 }
 
-void itemdialog::on_buttonBox_accepted()
-{
-    QDateTime start = ui->dateTimeEdit_Begin_2->dateTime();
-    QDateTime end = ui->dateTimeEdit_End_2->dateTime();
-
-    QMessageBox msgBox;
-
-    //тут возможно T
-    std::string newContent = ui->lineEdit_TaskName_2->text().toStdString();
-
-    if(newContent == ""){
-        msgBox.setText("Введите название задачи");
-        msgBox.exec();
-    }
-    else{
-        try{
-            Diagram->addItemNew(start, end, newContent);
-
-        } catch(Exception e){
-            msgBox.setText(QString::fromStdString(e.getMessage()));
-            msgBox.exec();
-//            on_buttonBox_accepted();
-//            itemdialog newItemdialog(ui->dateTimeEdit_Begin_2->dateTime(), ui->dateTimeEdit_End_2->dateTime(), Diagram);
-//            newItemdialog.setModal(true);
-//            newItemdialog.setTitleName("Добавление задачи");
-
-//            newItemdialog.exec();
-        }
-    }
-
-
-}
 
 void itemdialog::on_addPushButton_clicked()
 {
     QDateTime start = ui->dateTimeEdit_Begin_2->dateTime();
     QDateTime end = ui->dateTimeEdit_End_2->dateTime();
-
     QMessageBox msgBox;
-
     //тут возможно T
     std::string newContent = ui->lineEdit_TaskName_2->text().toStdString();
-
-    if(newContent == ""){
-        msgBox.setText("Введите название задачи");
-        msgBox.exec();
-    }
-    else{
+    if(this->windowTitle()=="Изменение задачи"){
         try{
-            Diagram->addItemNew(start, end, newContent);
+            Diagram->editTimelineItem(curTimeline->getName(), curTimeline->getIntervals()->at(this->curElem).getContent(), newContent, start, end);
             this->close();
-
         } catch(Exception e){
             msgBox.setText(QString::fromStdString(e.getMessage()));
             msgBox.exec();
         }
     }
+    else{
+        if(newContent == ""){
+            msgBox.setText("Введите название задачи");
+            msgBox.exec();
+        }
+        else{
+            try{
+                Diagram->addItemNew(start, end, newContent);
+                this->close();
 
+            } catch(Exception e){
+                msgBox.setText(QString::fromStdString(e.getMessage()));
+                msgBox.exec();
+            }
+        }
+    }
 }
