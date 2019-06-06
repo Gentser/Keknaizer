@@ -172,7 +172,7 @@
          </size>
         </property>
         <property name="text">
-         <string>Добавить</string>
+         <string>Подтвердить</string>
         </property>
        </widget>
       </item>

@@ -25,6 +25,8 @@ public:
 
     QDate curDay;
 
+    int curElem = -1;
+
 
 
 private slots:
@@ -32,6 +34,8 @@ private slots:
     void on_PushButton_editTask_clicked();
 
     void on_calendarWidget_clicked(const QDate &date);
+
+    void on_tableWidget_cellClicked(int row, int column);
 
 private:
     Ui::MainWindow *ui;

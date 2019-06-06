@@ -22,14 +22,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     Diagram = new GanttChart<std::string>();
 
+    curTimeline = Diagram->checkExisting(QDateTime(curDay));
+
     Serializer<GanttChart<std::string>>& serializer = Serializer<GanttChart<std::string>>::instance();
     serializer.importFromJson(Diagram);
 
-    // Устанавливаем текущую дату и TimeLine
-//    // Take current day
-//    curDay = ui->calendarWidget->selectedDate();
-//    curTimeline = Diagram->checkExisting(QDateTime(curDay));
-
+    // Определить текущие дату и день (текущее время, или данные из первого TimeLine)
     if (Diagram->getTimelines()->size() == 0 ||
             Diagram->getTimelines()->at(0).getIntervals()->size()==0) { // Возможно, если кол-во Item в 1-ом TimeLine==0, следует переходить к следующему TimeLine
         // Устанавливаем текущую дату и TimeLine
@@ -42,6 +40,9 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->calendarWidget->setSelectedDate(startDate.date());
         curDay = startDate.date();
     }
+      
+    // Текущий элемент для редактирования (+флаг - элемент для редактирования найден)
+    curElem = -1;
 
     // Устанавливаем дату первого TimeLine
     curTimeline = &Diagram->getTimelines()->at(0);
@@ -323,9 +324,10 @@ MainWindow::~MainWindow()
 void MainWindow::on_PushButton_addTask_clicked()
 {
 
-    itemDialog = new itemdialog(QDateTime(curDay, QTime(1,0)), QDateTime(curDay, QTime(23,50)), Diagram);
+    itemDialog = new itemdialog(QDateTime(curDay, QTime(1,0)), QDateTime(curDay, QTime(23,50)), Diagram, curTimeline, curElem);
     itemDialog->setModal(true);
-    itemDialog->setTitleName("Добававление задачи");
+    itemDialog->setTitleName("Добавление задачи");
+    itemDialog->setWindowTitle("Добавление задачи");
 
 
     itemDialog->exec();
@@ -337,15 +339,16 @@ void MainWindow::on_PushButton_addTask_clicked()
 
 void MainWindow::on_PushButton_editTask_clicked()
 {
-    itemDialog = new itemdialog(QDateTime(curDay, QTime(1,0)), QDateTime(curDay, QTime(23,50)), Diagram);
+    itemDialog = new itemdialog(QDateTime(curDay, QTime(1,0)), QDateTime(curDay, QTime(23,50)), Diagram, curTimeline, curElem);
     itemDialog->setModal(true);
     itemDialog->setTitleName("Изменение задачи");
+    itemDialog->setWindowTitle("Изменение задачи");
     itemDialog->exec();
 }
 
 void MainWindow::on_calendarWidget_clicked(const QDate &date)
 {
-
+    curElem = -1;
     curDay = date;
     QMessageBox msgBox;
     curTimeline = Diagram->checkExisting(QDateTime(date));
@@ -360,4 +363,21 @@ void MainWindow::on_calendarWidget_clicked(const QDate &date)
 //        msgBox.setText("СУЩЕСТВУЕТ");
 //        msgBox.exec();
     }
+}
+
+void MainWindow::on_tableWidget_cellClicked(int row, int column)
+{
+    if(column == 0){
+        if(row >= 2){
+            curElem = row-2;
+            ui->PushButton_deleteTask->setEnabled(true);
+            ui->PushButton_editTask->setEnabled(true);
+//            qDebug() << row << "_" << column;
+            return;
+        }
+    }
+    curElem = -1;
+    ui->PushButton_deleteTask->setEnabled(false);
+    ui->PushButton_editTask->setEnabled(false);
+//    qDebug() << row << "_" << column;
 }
