@@ -113,6 +113,38 @@ public:
         return nullptr;
     }
 
+     int findItemIndex(T content){
+        int i = 0;
+        for(auto iter = this->intervals->begin(); iter != this->intervals->end(); ++iter, i++){
+            if(iter->getContent() == content){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+     TimelineItem<T> *findNextToItem(T content){ //iterator
+        int i = findItemIndex(content);
+
+        if (i!=-1 && i < this->intervals->size()-1)
+        {
+            return &this->intervals->at(i+1);
+        }
+        throw ItemNameNotFoundException(content);
+        return nullptr;
+    }
+
+     TimelineItem<T> *findPrevToItem(T content){ //iterator
+        int i = findItemIndex(content);
+
+        if (i!=-1 && i > 0)
+        {
+            return &this->intervals->at(i-1);
+        }
+        throw ItemNameNotFoundException(content);
+        return nullptr;
+    }
+
      //Времменный костыль
      //Надо ставить !() == так правильно, типа не нашлось такого имени
      bool findWithoutException(T content){
