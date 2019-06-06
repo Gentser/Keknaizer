@@ -22,9 +22,9 @@ public:
     GanttChart<std::string> *Diagram;
 
     Timeline<std::string> *curTimeline;
+    int curTimeLineIndex;
 
     QDate curDay;
-
     int curElem = -1;
 
 
@@ -38,6 +38,10 @@ private slots:
     void on_tableWidget_cellClicked(int row, int column);
 
     void on_PushButton_deleteTask_clicked();
+
+    void on_pushButton_nextTimeLine_clicked();
+
+    void on_pushButton_prevTimeLine_clicked();
 
 private:
     Ui::MainWindow *ui;

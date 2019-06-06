@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>782</width>
-    <height>621</height>
+    <width>776</width>
+    <height>625</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -46,7 +46,7 @@
            <property name="frameShadow">
             <enum>QFrame::Raised</enum>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout_2">
+           <layout class="QVBoxLayout" name="verticalLayout">
             <item>
              <widget class="QPushButton" name="PushButton_addTask">
               <property name="minimumSize">
@@ -108,8 +108,8 @@
               </property>
               <property name="sizeHint" stdset="0">
                <size>
-                <width>20</width>
-                <height>40</height>
+                <width>173</width>
+                <height>13</height>
                </size>
               </property>
              </spacer>
@@ -135,6 +135,37 @@
                <string>Удалить задачу</string>
               </property>
              </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <item>
+               <widget class="QPushButton" name="pushButton_prevTimeLine">
+                <property name="text">
+                 <string>Назад</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_nextTimeLine">
+                <property name="text">
+                 <string>Вперед</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
            </layout>
           </widget>
@@ -309,8 +340,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>782</width>
-     <height>21</height>
+     <width>776</width>
+     <height>26</height>
     </rect>
    </property>
   </widget>

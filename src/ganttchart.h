@@ -157,6 +157,16 @@ public:
        return nullptr;
    }
 
+    int findTimelineIndex(std::string name){
+       int i = 0;
+       for(auto iter = this->getTimelines()->begin(); iter != this->getTimelines()->end(); ++iter, i++){
+           if(iter->getName() == name){
+               return i; //  iter
+           }
+       }
+       return -1;
+   }
+
     void editTimelineName(std::string oldName, std::string newName){
         Timeline<T> *timelineToChange = this->findTimeline(oldName);
         if(checkFreeTimelineName(newName)){
