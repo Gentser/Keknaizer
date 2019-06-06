@@ -262,7 +262,8 @@ void MainWindow::drawGantt()
 {
     QColor color(255,0,0);  // Цвет заливки времени
 
-    std::vector<TimelineItem<std::string>> *timeLineItems = Diagram->getTimelines()->at(2).getIntervals();
+//    std::vector<TimelineItem<std::string>> *timeLineItems = Diagram->getTimelines()->at(2).getIntervals();
+    std::vector<TimelineItem<std::string>> *timeLineItems = curTimeline->getIntervals();
     int itemNubmer = timeLineItems->size();
 
     resizeGanttArea(itemNubmer);    // Меняем кол-во строк в таблице (кол-во задач)
@@ -274,6 +275,18 @@ void MainWindow::drawGantt()
 //        drawTimeLineItem(item, i, color);
         drawTimeLineItem(item, i, colors->at(i%colors->size()));  // FORWARD LINE NUMBER!!!
     }
+}
+
+void MainWindow::drawEmptyGantt()
+{
+    QTableWidget *wg = ui->tableWidget;
+    wg->clear();
+    wg->setColumnCount(0);
+    wg->setRowCount(0);
+
+    QMessageBox msgBox;
+    msgBox.setText("На этой неделе у вас не существует задач!");
+    msgBox.exec();
 }
 
 MainWindow::~MainWindow()
@@ -298,6 +311,7 @@ void MainWindow::on_PushButton_addTask_clicked()
     itemDialog->exec();
 
     // Redraw Gantt chart
+    curTimeline = Diagram->checkExisting(QDateTime(curDay));
     drawGantt();
 }
 
@@ -314,15 +328,16 @@ void MainWindow::on_calendarWidget_clicked(const QDate &date)
 
     curDay = date;
     QMessageBox msgBox;
-//    qDebug() << date;
     curTimeline = Diagram->checkExisting(QDateTime(date));
+
+    // Redraw Gantt chart in right way
     if(curTimeline == nullptr){
-
-        msgBox.setText("На этой неделе у вас не существует записей (нет Timeline-ов)!");
-        msgBox.exec();
+        drawEmptyGantt();
+//        msgBox.setText("На этой неделе у вас не существует записей (нет Timeline-ов)!");
+//        msgBox.exec();
     } else{
-        msgBox.setText("СУЩЕСТВУЕТ");
-        msgBox.exec();
+        drawGantt();
+//        msgBox.setText("СУЩЕСТВУЕТ");
+//        msgBox.exec();
     }
-
 }
