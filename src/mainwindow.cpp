@@ -174,6 +174,8 @@ MainWindow::MainWindow(QWidget *parent) :
         drawEmptyGantt();
     }
 
+    doAlgorithm();
+
 }
 
 
@@ -338,6 +340,7 @@ void MainWindow::on_PushButton_addTask_clicked()
     // Redraw Gantt chart
     curTimeline = Diagram->checkExisting(QDateTime(curDay));
     drawGantt();
+    doAlgorithm();
 }
 
 void MainWindow::on_PushButton_editTask_clicked()
@@ -351,6 +354,7 @@ void MainWindow::on_PushButton_editTask_clicked()
     // Redraw Gantt chart
     curTimeline = Diagram->checkExisting(QDateTime(curDay));
     drawGantt();
+    doAlgorithm();
 }
 
 void MainWindow::on_calendarWidget_clicked(const QDate &date)
@@ -366,6 +370,8 @@ void MainWindow::on_calendarWidget_clicked(const QDate &date)
     } else{
         drawGantt();
     }
+
+    doAlgorithm();
 }
 
 void MainWindow::on_tableWidget_cellClicked(int row, int column)
@@ -411,7 +417,7 @@ void MainWindow::on_PushButton_deleteTask_clicked()
         msgBox.exec();
     }
 
-
+    doAlgorithm();
 }
 
 void MainWindow::on_pushButton_nextTimeLine_clicked()
@@ -447,6 +453,7 @@ void MainWindow::on_pushButton_nextTimeLine_clicked()
 
     // Redraw Gantt chart in right way
     drawGantt();
+    doAlgorithm();
 }
 
 void MainWindow::on_pushButton_prevTimeLine_clicked()
@@ -481,4 +488,50 @@ void MainWindow::on_pushButton_prevTimeLine_clicked()
 
     // Redraw Gantt chart in right way
     drawGantt();
+    doAlgorithm();
+}
+
+void MainWindow::doAlgorithm(){
+    qint64 sumOfBusy = 0;
+    qint64 sumOfIntersections = 0;
+    if (curTimeline != nullptr){
+        int i = 0;
+        for(auto iter = curTimeline->getIntervals()->begin(); iter != curTimeline->getIntervals()->end(), i < curTimeline->getIntervals()->size()-1; ++iter, i++){
+            QDateTime startDate = curTimeline->getIntervals()->at(i).getStart();
+            QDateTime endDate = curTimeline->getIntervals()->at(i).getEnd();
+
+            qint64 intervalSec = startDate.secsTo(endDate);
+            sumOfBusy+= intervalSec;
+
+            QDateTime nextStartTime = curTimeline->getIntervals()->at(i+1).getStart();
+            QDateTime nextEndTime = curTimeline->getIntervals()->at(i+1).getEnd();
+
+            if(nextStartTime <= endDate && nextEndTime > endDate){
+                sumOfIntersections += nextStartTime.secsTo(endDate);
+
+            } else if(nextStartTime <= endDate && nextEndTime <= endDate){
+                sumOfIntersections += nextStartTime.secsTo(nextEndTime);
+
+            }
+
+        }
+        int end = curTimeline->getIntervals()->size()-1;
+        QDateTime startDate = curTimeline->getIntervals()->at(end).getStart();
+        QDateTime endDate = curTimeline->getIntervals()->at(end).getEnd();
+
+        sumOfBusy += startDate.secsTo(endDate);
+        sumOfBusy /= 3600;
+        sumOfIntersections /= 3600;
+
+
+        int result = sumOfBusy - sumOfIntersections;
+
+//        qDebug() << "Result of ALg= " << result ;
+        ui->label_freeTime->setText("Занято времени: " + QString::number(result) + "ч/" + QString::number(16*7) + "ч");
+        ui->label_freeTime->setAlignment(Qt::AlignCenter);
+    }
+    else{
+        ui->label_freeTime->setText("Свободного времени: " + QString::number(16*7) + "ч");
+        ui->label_freeTime->setAlignment(Qt::AlignCenter);
+    }
 }

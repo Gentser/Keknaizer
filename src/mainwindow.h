@@ -27,6 +27,8 @@ public:
     QDate curDay;
     int curElem = -1;
 
+    void doAlgorithm();
+
 
 
 private slots:
