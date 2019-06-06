@@ -185,6 +185,7 @@ public:
         else throw NotExistingTimelineException();
     }
 
+
     bool deleteTimelineByName(std::string name){
 //        if(curTimeline != nullptr){
 //        if(this->findTimeline())

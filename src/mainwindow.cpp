@@ -382,9 +382,16 @@ void MainWindow::on_PushButton_deleteTask_clicked()
     try{
         Diagram->deleteItemFromTimeline(curTimeline, curTimeline->getIntervals()->at(curElem).getContent());
 
+        if(curTimeline->getIntervals()->empty()){
+            Diagram->deleteTimeline(curTimeline);
+            drawEmptyGantt();
+        }
+        else{
+            drawGantt();
+        }
+
         // Redraw Gantt chart
         curTimeline = Diagram->checkExisting(QDateTime(curDay));
-        drawGantt();
 
         curElem = -1;
         ui->PushButton_deleteTask->setEnabled(false);
