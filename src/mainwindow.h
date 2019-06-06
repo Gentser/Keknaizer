@@ -37,6 +37,8 @@ private slots:
 
     void on_tableWidget_cellClicked(int row, int column);
 
+    void on_PushButton_deleteTask_clicked();
+
 private:
     Ui::MainWindow *ui;
     itemdialog *itemDialog;
