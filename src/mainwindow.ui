@@ -81,6 +81,9 @@
             </item>
             <item>
              <widget class="QPushButton" name="PushButton_editTask">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -298,7 +301,7 @@
      <x>0</x>
      <y>0</y>
      <width>782</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
