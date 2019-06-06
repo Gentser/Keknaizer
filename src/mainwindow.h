@@ -47,6 +47,7 @@ private:
     void drawGantt();
     void drawTimeLineItem(TimelineItem<std::string> item, int row, QColor color=QColor(0,0,255));
     void drawTimeLine(Timeline<std::string> timeL);
+    void drawEmptyGantt();
 };
 
 #endif
