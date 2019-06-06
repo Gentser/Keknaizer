@@ -174,6 +174,8 @@ MainWindow::MainWindow(QWidget *parent) :
         drawEmptyGantt();
     }
 
+    doAlgorithm();
+
 }
 
 
@@ -481,4 +483,44 @@ void MainWindow::on_pushButton_prevTimeLine_clicked()
 
     // Redraw Gantt chart in right way
     drawGantt();
+}
+
+void MainWindow::doAlgorithm(){
+    int sumOfBusy = 0;
+    int sumOfIntersections = 0;
+    if (curTimeline != nullptr){
+        int i = 0;
+        for(auto iter = curTimeline->getIntervals()->begin(); iter != curTimeline->getIntervals()->end(), i < curTimeline->getIntervals()->size()-1; ++iter, i++){
+//            sumOfBusy += (iter->getEnd() - iter->getStart())
+            QDateTime startDate = curTimeline->getIntervals()->at(i).getStart();
+            QDateTime endDate = curTimeline->getIntervals()->at(i).getEnd();
+
+            int intervalSec = startDate.secsTo(endDate);
+        //    qDebug() << "\tTime diff ms: " <<QString::number(intervalSec);
+            sumOfBusy+= intervalSec;
+
+//            QDateTime nextStartTime
+            QDateTime nextStartTime = curTimeline->getIntervals()->at(i+1).getStart();
+            QDateTime nextEndTime = curTimeline->getIntervals()->at(i+1).getEnd();
+
+            if(nextStartTime <= endDate && nextEndTime > endDate){
+                sumOfIntersections += nextStartTime.secsTo(endDate);
+
+            } else if(nextStartTime <= endDate && nextEndTime <= endDate){
+                sumOfIntersections += nextStartTime.secsTo(nextEndTime);
+
+            }
+
+
+        }
+        sumOfIntersections /= 3600;
+        sumOfBusy /= 3600;
+
+        int result = sumOfBusy - sumOfIntersections;
+
+        qDebug() << "Result of ALg= " << result ;
+    }
+    else{
+
+    }
 }
