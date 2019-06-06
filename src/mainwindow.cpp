@@ -44,12 +44,6 @@ MainWindow::MainWindow(QWidget *parent) :
     // Текущий элемент для редактирования (+флаг - элемент для редактирования найден)
     curElem = -1;
 
-    // Устанавливаем дату первого TimeLine
-    curTimeline = &Diagram->getTimelines()->at(0);
-    QDateTime startDate = curTimeline->getIntervals()->at(0).getStart();
-    ui->calendarWidget->setSelectedDate(startDate.date());
-    curDay = startDate.date();
-
     // Make colors vector for Gantt chart drawing
     colors = new QVector<QColor>();
     colors->push_back(Qt::red);
@@ -344,6 +338,10 @@ void MainWindow::on_PushButton_editTask_clicked()
     itemDialog->setTitleName("Изменение задачи");
     itemDialog->setWindowTitle("Изменение задачи");
     itemDialog->exec();
+
+    // Redraw Gantt chart
+    curTimeline = Diagram->checkExisting(QDateTime(curDay));
+    drawGantt();
 }
 
 void MainWindow::on_calendarWidget_clicked(const QDate &date)
@@ -356,12 +354,8 @@ void MainWindow::on_calendarWidget_clicked(const QDate &date)
     // Redraw Gantt chart in right way
     if(curTimeline == nullptr){
         drawEmptyGantt();
-//        msgBox.setText("На этой неделе у вас не существует записей (нет Timeline-ов)!");
-//        msgBox.exec();
     } else{
         drawGantt();
-//        msgBox.setText("СУЩЕСТВУЕТ");
-//        msgBox.exec();
     }
 }
 
@@ -380,4 +374,26 @@ void MainWindow::on_tableWidget_cellClicked(int row, int column)
     ui->PushButton_deleteTask->setEnabled(false);
     ui->PushButton_editTask->setEnabled(false);
 //    qDebug() << row << "_" << column;
+}
+
+void MainWindow::on_PushButton_deleteTask_clicked()
+{
+    QMessageBox msgBox;
+    try{
+        Diagram->deleteItemFromTimeline(curTimeline, curTimeline->getIntervals()->at(curElem).getContent());
+
+        // Redraw Gantt chart
+        curTimeline = Diagram->checkExisting(QDateTime(curDay));
+        drawGantt();
+
+        curElem = -1;
+        ui->PushButton_deleteTask->setEnabled(false);
+        ui->PushButton_editTask->setEnabled(false);
+
+    } catch(Exception e){
+        msgBox.setText(QString::fromStdString(e.getMessage()));
+        msgBox.exec();
+    }
+
+
 }
