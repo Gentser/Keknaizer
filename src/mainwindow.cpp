@@ -44,12 +44,6 @@ MainWindow::MainWindow(QWidget *parent) :
     // Текущий элемент для редактирования (+флаг - элемент для редактирования найден)
     curElem = -1;
 
-    // Устанавливаем дату первого TimeLine
-    curTimeline = &Diagram->getTimelines()->at(0);
-    QDateTime startDate = curTimeline->getIntervals()->at(0).getStart();
-    ui->calendarWidget->setSelectedDate(startDate.date());
-    curDay = startDate.date();
-
     // Make colors vector for Gantt chart drawing
     colors = new QVector<QColor>();
     colors->push_back(Qt::red);
@@ -344,6 +338,10 @@ void MainWindow::on_PushButton_editTask_clicked()
     itemDialog->setTitleName("Изменение задачи");
     itemDialog->setWindowTitle("Изменение задачи");
     itemDialog->exec();
+
+    // Redraw Gantt chart
+    curTimeline = Diagram->checkExisting(QDateTime(curDay));
+    drawGantt();
 }
 
 void MainWindow::on_calendarWidget_clicked(const QDate &date)
