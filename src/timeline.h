@@ -12,7 +12,7 @@ template <class T>
     class Timeline
     {
     private:
-        std::vector<TimelineItem<T>/*, Allocator<T>*/> *intervals; // было без звездочки
+        std::vector<TimelineItem<T>, Allocator<TimelineItem<T>>> *intervals; // было без звездочки
         std::string name;
 
         QDateTime startDate;
@@ -28,7 +28,7 @@ template <class T>
     //    }
 
         Timeline(std::string name, QDateTime maxStart, QDateTime maxEnd){
-            this->intervals = new std::vector<TimelineItem<T>/*, Allocator<T>*/>; //Раньше тут было пусто
+            this->intervals = new std::vector<TimelineItem<T>, Allocator<TimelineItem<T>>>; //Раньше тут было пусто
             this->name = name;
             this->startDate = maxStart;
             this->endDate = maxEnd;
@@ -60,10 +60,10 @@ template <class T>
 
 
 
-        std::vector<TimelineItem<T>/*, Allocator<T>*/> * getIntervals() const{ //было без звездочки
+        std::vector<TimelineItem<T>, Allocator<TimelineItem<T>>> * getIntervals() const{ //было без звездочки
             return this->intervals; //.
         }
-        void setIntervals(const std::vector<TimelineItem<T>/*, Allocator<T>*/> &value){
+        void setIntervals(const std::vector<TimelineItem<T>, Allocator<TimelineItem<T>>> &value){
             this->intervals = value;
         }
 

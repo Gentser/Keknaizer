@@ -287,7 +287,7 @@ void MainWindow::drawGantt()
     QColor color(255,0,0);  // Цвет заливки времени
 
 //    std::vector<TimelineItem<std::string>> *timeLineItems = Diagram->getTimelines()->at(2).getIntervals();
-    std::vector<Gantt::TimelineItem<std::string>> *timeLineItems = curTimeline->getIntervals();
+    std::vector<Gantt::TimelineItem<std::string>, Allocator<Gantt::TimelineItem<std::string>>> *timeLineItems = curTimeline->getIntervals();
     int itemNubmer = timeLineItems->size();
 
     resizeGanttArea(itemNubmer);    // Меняем кол-во строк в таблице (кол-во задач)
