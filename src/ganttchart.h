@@ -12,7 +12,7 @@ template <class T>
     private:
         QDateTime minDate;
         QDateTime maxDate;
-        std::vector<Timeline<T>> *timelines; // <TimelineItem<T>>
+        std::vector<Timeline<T>, Allocator<Timeline<T>>> *timelines; // <TimelineItem<T>>
 
 
     public:
@@ -46,7 +46,7 @@ template <class T>
             this->setMinDate(QDateTime(QDate(2000,1,1), QTime(0,0)));
             this->setMaxDate(QDateTime(QDate(2020,1,1), QTime(0,0)));
 
-            this->timelines = new std::vector<Timeline<T>>;
+            this->timelines = new std::vector<Timeline<T>, Allocator<Timeline<T>>>;
         }
 
         ~GanttChart() {}
@@ -80,11 +80,11 @@ template <class T>
         {
             maxDate = value;
         }
-        std::vector<Timeline<T>> *getTimelines() const //<TimelineItem<T>>
+        std::vector<Timeline<T>, Allocator<Timeline<T>>> *getTimelines() const //<TimelineItem<T>>
         {
             return timelines;
         }
-        void setTimelines(const std::vector<Timeline<T>> &value) // <TimelineItem<T>>
+        void setTimelines(const std::vector<Timeline<T>, Allocator<Timeline<T>>> &value) // <TimelineItem<T>>
         {
             timelines = value;
         }
