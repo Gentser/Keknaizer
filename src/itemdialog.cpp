@@ -4,7 +4,7 @@
 #include "exception"
 #include <QMessageBox>
 
-itemdialog::itemdialog( QDateTime startOfWeek, QDateTime endOfWeek, GanttChart<std::string> *diag, Timeline<std::string> *timeline, int curElement, QWidget *parent) : //new constructor
+itemdialog::itemdialog( QDateTime startOfWeek, QDateTime endOfWeek, Gantt::GanttChart<std::string> *diag, Gantt::Timeline<std::string> *timeline, int curElement, QWidget *parent) : //new constructor
     QDialog(parent),
     ui(new Ui::itemdialog)
 {

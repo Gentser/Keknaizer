@@ -8,7 +8,6 @@
 #include "iterator.h"
 #include "exception.h"
 #include "serializer.h"
-#include "invariant.h"
 
 #include <QMessageBox>
 
@@ -21,12 +20,12 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    Diagram = new GanttChart<std::string>();
+    Diagram = new Gantt::GanttChart<std::string>();
 
-    Serializer<GanttChart<std::string>>& serializer = Serializer<GanttChart<std::string>>::instance();
+    Serializer<Gantt::GanttChart<std::string>>& serializer = Serializer<Gantt::GanttChart<std::string>>::instance();
     serializer.importFromJson(Diagram);
 
-    bool cool = GanttChart<std::string>::Invariant::isSorted(Diagram);
+    bool cool = Gantt::GanttChart<std::string>::Invariant::isSorted(Diagram);
 
 
     // Определить текущие дату и день (текущее время, или данные из первого TimeLine)
@@ -193,7 +192,7 @@ void MainWindow::resizeGanttArea(int row)
 
 }
 
-void MainWindow::drawTimeLineItem(TimelineItem<std::string> item, int row, QColor color)
+void MainWindow::drawTimeLineItem(Gantt::TimelineItem<std::string> item, int row, QColor color)
 {
 //    qDebug() << "Dates: " << item.getStart().toString() << " -> " << item.getEnd().toString();
     QDateTime startDate = item.getStart();
@@ -288,7 +287,7 @@ void MainWindow::drawGantt()
     QColor color(255,0,0);  // Цвет заливки времени
 
 //    std::vector<TimelineItem<std::string>> *timeLineItems = Diagram->getTimelines()->at(2).getIntervals();
-    std::vector<TimelineItem<std::string>> *timeLineItems = curTimeline->getIntervals();
+    std::vector<Gantt::TimelineItem<std::string>> *timeLineItems = curTimeline->getIntervals();
     int itemNubmer = timeLineItems->size();
 
     resizeGanttArea(itemNubmer);    // Меняем кол-во строк в таблице (кол-во задач)
@@ -296,7 +295,7 @@ void MainWindow::drawGantt()
 
     for (int i=0; i < timeLineItems->size(); i++)
     {
-        TimelineItem<std::string> item = timeLineItems->at(i);
+        Gantt::TimelineItem<std::string> item = timeLineItems->at(i);
 //        drawTimeLineItem(item, i, color);
         drawTimeLineItem(item, i, colors->at(i%colors->size()));  // FORWARD LINE NUMBER!!!
     }
@@ -319,7 +318,7 @@ MainWindow::~MainWindow()
     //Serializer<GanttChart<Timeline<TimelineItem<std::string>>>>& serializer = Serializer<GanttChart<Timeline<TimelineItem<std::string>>>::instance();
 
 
-    Serializer<GanttChart<std::string>>& serializer = Serializer<GanttChart<std::string>>::instance();
+    Serializer<Gantt::GanttChart<std::string>>& serializer = Serializer<Gantt::GanttChart<std::string>>::instance();
 
     serializer.exportToJson(Diagram);
     delete ui;

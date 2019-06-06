@@ -13,7 +13,7 @@ class itemdialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit itemdialog(QDateTime startOfWeek, QDateTime endOfWeek, GanttChart<std::string> *diag, Timeline<std::string> *timeline, int curElement, QWidget *parent = nullptr);
+    explicit itemdialog(QDateTime startOfWeek, QDateTime endOfWeek, Gantt::GanttChart<std::string> *diag, Gantt::Timeline<std::string> *timeline, int curElement, QWidget *parent = nullptr);
 
     void setTitleName(QString str);
     ~itemdialog();
@@ -27,9 +27,9 @@ private:
     Ui::itemdialog *ui;
 
     //T
-    GanttChart<std::string> *Diagram;
+    Gantt::GanttChart<std::string> *Diagram;
 
-    Timeline<std::string> *curTimeline;
+    Gantt::Timeline<std::string> *curTimeline;
 
     int curElem;
 };

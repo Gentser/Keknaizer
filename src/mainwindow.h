@@ -19,9 +19,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    GanttChart<std::string> *Diagram;
+    Gantt::GanttChart<std::string> *Diagram;
 
-    Timeline<std::string> *curTimeline;
+    Gantt::Timeline<std::string> *curTimeline;
     int curTimeLineIndex;
 
     QDate curDay;
@@ -51,8 +51,8 @@ private:
     void resizeGanttArea(int row);
     void drawGanntHeader();
     void drawGantt();
-    void drawTimeLineItem(TimelineItem<std::string> item, int row, QColor color=QColor(0,0,255));
-    void drawTimeLine(Timeline<std::string> timeL);
+    void drawTimeLineItem(Gantt::TimelineItem<std::string> item, int row, QColor color=QColor(0,0,255));
+    void drawTimeLine(Gantt::Timeline<std::string> timeL);
     void drawEmptyGantt();
 };
 

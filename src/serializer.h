@@ -99,7 +99,7 @@ void Serializer<T>::importFromJson(T* gant){
 //         //QLocale locale(QLocale::English, QLocale::UnitedStates);
 //         //QDateTime dt = QLocale::toDateTime(obj["dateToEnd"].toString(), "dd.MM.yyyy hh:mm:ss");
 
-        Timeline<std::string> *newTimeline = new Timeline<std::string>(obj["name"].toString().toStdString(),QDateTime::fromString(obj["dateToStart"].toString(),"dd.MM.yyyy hh:mm:ss"),
+        Gantt::Timeline<std::string> *newTimeline = new Gantt::Timeline<std::string>(obj["name"].toString().toStdString(),QDateTime::fromString(obj["dateToStart"].toString(),"dd.MM.yyyy hh:mm:ss"),
                 QDateTime::fromString(obj["dateToEnd"].toString("dd.MM.yyyy hh:mm:ss"),"dd.MM.yyyy hh:mm:ss"));
 
         jIntervals = obj["Intervals"].toArray();
@@ -107,7 +107,7 @@ void Serializer<T>::importFromJson(T* gant){
         {
             QJsonObject objInt = iterItem->toObject();
 
-                newTimeline->addItem(new TimelineItem<std::string>(QDateTime::fromString(objInt["start"].toString(),"dd.MM.yyyy hh:mm:ss"),
+                newTimeline->addItem(new Gantt::TimelineItem<std::string>(QDateTime::fromString(objInt["start"].toString(),"dd.MM.yyyy hh:mm:ss"),
                                                                   QDateTime::fromString(objInt["end"].toString(),"dd.MM.yyyy hh:mm:ss"),
                                                                   std::string(objInt["Content"].toString().toStdString())));
         }

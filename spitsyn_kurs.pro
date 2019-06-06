@@ -32,8 +32,7 @@ SOURCES += \
     timelineitem.cpp \
     timeline.cpp \
     ganttchart.cpp \
-    exception.cpp \
-    invariant.cpp
+    exception.cpp
 
 HEADERS += \
     itemdialog.h \
@@ -46,8 +45,7 @@ HEADERS += \
     timelineitem.h \
     timeline.h \
     ganttchart.h \
-    exception.h \
-    invariant.h
+    exception.h
 
 FORMS += \
         itemdialog.ui \
